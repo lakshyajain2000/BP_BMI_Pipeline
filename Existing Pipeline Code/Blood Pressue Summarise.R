@@ -13,6 +13,8 @@
 # added new 160/100 DxTx summaries as in new summary sheets (BPDxNew)
 # updated sbp/dbp_final algorithm 20220710
 
+## Needs rewriting to be cleaner
+
 library(survey)
 library(tidyverse)
 library(dtplyr)

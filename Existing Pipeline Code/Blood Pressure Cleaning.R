@@ -8,15 +8,17 @@ library(plyr)
 
 date <- format(Sys.Date(),"%Y%m%d") # Set the date to a consistent format
 
-wd <- "S:/Projects/HeightProject/Original dataset/Blood Pressure/BP_individual_data/data_cleaned/"  # Set working directory to folder where the output RDS file will be saved
+wd <- "/Volumes/HeightProject/Original dataset/Blood Pressure/BP_individual_data/data_cleaned"  # Set working directory to folder where the output RDS file will be saved
 
-indir <- "S:/Projects/HeightProject/Original dataset/Data/Surveys/Extracted survey/Merged/" # Call the folder with the merged dataset in 
-dhs   <- readRDS("S:/Projects/HeightProject/Original dataset/Data/Surveys/DHS/DHS-formatted_latest.RDS")  # DHS
-steps <- readRDS("S:/Projects/HeightProject/Original dataset/Data/Surveys/STEPS/STEPSdata_GLU_BP_chol_formatted_latest.RDS")  # STEPS
-data  <- readRDS(paste0(indir,"BP_individual_wBMI_data.RDS")) 
+indir <- "/Volumes/HeightProject/Original dataset/Data/Surveys/Extracted survey/Merged/old" # Call the folder with the merged dataset in 
+dhs   <- readRDS("/Volumes/HeightProject/Original dataset/Data/Surveys/DHS/DHS-formatted_latest.RDS")  # DHS dataframe
+steps <- readRDS("/Volumes/HeightProject/Original dataset/Data/Surveys/STEPS/STEPSdata_GLU_BP_chol_formatted_latest.RDS")  # STEPS dataframe
+data  <- readRDS(paste0(indir,"BP_individual_wBMI_data.RDS"))
 
-data_list <- readRDS(paste(indir,"survey_data_availability.RDS",sep="")) #List of metadata for each survey
 
+data_list <- readRDS(paste(indir,"survey_data_availability.RDS",sep="")) #List of metadata for each survey and what variables are available
+
+# Removes columns from DHS and STEPS that are not in the other individual data
 dhs   <- dhs[,names(dhs)%in%c(names(data),"self_hyper_12mos")]
 steps <- steps[,names(steps)%in%c(names(data),"self_hyper_12mos")]
 
@@ -625,7 +627,3 @@ data$weight_clean<-ifelse(data$weight_clean<10 | data$weight_clean>300, NA, data
 data$height1 <- data$height2 <- data$height3 <- data$weight1 <- data$weight2 <- data$weight3 <- NULL 
 
 
-# Output ========================================================================================
-saveRDS(data,file=paste0(wd,"BP_individual_data_cleaned_wBMI.RDS"))
-saveRDS(data,file=paste0(wd,"archived/BP_individual_data_cleaned_wBMI_",date,".RDS"))
-sink()
