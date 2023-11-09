@@ -22,9 +22,9 @@ library(data.table)
 library(doParallel)
 date<-format(Sys.Date(),"%Y%m%d")
 
-data <- readRDS("S:/Projects/HeightProject/Original dataset/Blood Pressure/BP_individual_data/data_cleaned/BP_individual_data_cleaned_wBMI.RDS")
+data <- readRDS("/Volumes/HeightProject/Original dataset/Blood Pressure/BP_individual_data/data_cleaned/BP_individual_data_cleaned_wBMI.RDS")
 
-wd <- "S:/Projects/HeightProject/Original dataset/Blood Pressure/BP_individual_data/BP_summaries/"
+wd <- "~/Documents/Pipeline/BP_BMI_Pipeline"
 
 CW <- FALSE
 DIST <- FALSE
