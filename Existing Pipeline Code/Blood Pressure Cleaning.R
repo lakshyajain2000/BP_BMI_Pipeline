@@ -8,9 +8,9 @@ library(plyr)
 
 date <- format(Sys.Date(),"%Y%m%d") # Set the date to a consistent format
 
-wd <- "/Volumes/HeightProject/Original dataset/Blood Pressure/BP_individual_data/data_cleaned"  # Set working directory to folder where the output RDS file will be saved
+wd <- "~/Documents/Pipeline/BP_BMI_Pipeline"  # Set working directory to folder where the output RDS file will be saved
 
-indir <- "/Volumes/HeightProject/Original dataset/Data/Surveys/Extracted survey/Merged/old" # Call the folder with the merged dataset in 
+indir <- "/Volumes/HeightProject/Original dataset/Data/Surveys/Extracted survey/Merged/" # Call the folder with the merged dataset in 
 dhs   <- readRDS("/Volumes/HeightProject/Original dataset/Data/Surveys/DHS/DHS-formatted_latest.RDS")  # DHS dataframe
 steps <- readRDS("/Volumes/HeightProject/Original dataset/Data/Surveys/STEPS/STEPSdata_GLU_BP_chol_formatted_latest.RDS")  # STEPS dataframe
 data  <- readRDS(paste0(indir,"BP_individual_wBMI_data.RDS"))
@@ -440,7 +440,7 @@ data$dropped[dropList] <- paste(data$dropped[dropList], "NoData")
 ### g-j. antihypertensive drug use ------------------------------------
 
 # The variable should be either 0 or 1
-data$self_hyper[which(data$self_hyper<0)] <- NA # Get ride of negative values
+data$self_hyper[which(data$self_hyper<0)] <- NA # Get rid of negative values
 clnList <- which(data$self_hyper!=0&data$self_hyper!=1) # flag the datapoints that dont have the variable as either 0 or 1
 print_cleaned("self_hyper") # Print all the studies and percentanges that were dropped that had this variable
 data$self_hyper[clnList] <- NA # Make all the wrong values NA
@@ -626,4 +626,5 @@ data$weight_clean<-ifelse(data$weight_clean<10 | data$weight_clean>300, NA, data
 
 data$height1 <- data$height2 <- data$height3 <- data$weight1 <- data$weight2 <- data$weight3 <- NULL 
 
-
+sink()
+saveRDS(data,file=paste0(wd,"BP_individual_data_cleaned_wBMI.RDS"))
