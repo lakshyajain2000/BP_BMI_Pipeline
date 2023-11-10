@@ -76,7 +76,7 @@ data$age_group0[list] <- as.character(data$age_group[list])
 # Categorize age groups ====
 data$age_min  <- with(data, ifelse(sex=="male", age_min_bp_M, age_min_bp_F))
 data$age_max  <- with(data, ifelse(sex=="male", age_max_bp_M, age_max_bp_F))
-# generate standard age groups, regardlesss of design age ranges
+# generate standard age groups, regardless of design age ranges
 data$age_mean <- with(data, ifelse(age<20, 15, ifelse(age<30, 25, ifelse(age<40, 35, ifelse(age<50, 45, ifelse(age<60, 55, ifelse(age<70, 65, ifelse(age<80, 75, 84.91))))))) )
 # generate age group
 data$age_group <- paste(data$age_mean-5,data$age_mean+4,sep="-")
