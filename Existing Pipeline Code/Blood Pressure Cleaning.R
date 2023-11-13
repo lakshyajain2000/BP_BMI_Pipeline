@@ -233,7 +233,7 @@ data$sbp10_f[clnList] <- NA
 data$sbp10_f[which(data$unit_bp=="EXCLUDE")] <- NA
 
 data$sbp11_f <- data$sbp11
-data$sbp11_f[which(data$sbp11_f<=0|data$sbp11_f%in%c(777,888,994,995,996,999))] <- NA
+data$sbp11_f[which(data$sbp11_f<=0|data$sbp11_f%in%c(777,888,994,995,996,999))] <- NA # common code for missing data - need to be variable specific
 clnList <- which(data$sbp11_f>max_sbp | data$sbp11_f<min_sbp)
 N_sbp <- N_sbp + sum(!is.na(data$sbp11_f))
 N_sbp_cleaned <- N_sbp_cleaned + length(clnList)
