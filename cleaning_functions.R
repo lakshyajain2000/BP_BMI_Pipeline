@@ -261,6 +261,7 @@ clean_age <- function(age) {
   clean_list <- which(age < 0 | age > 120)
   print(paste("Number of age data recoded as NA:", length(clean_list), "of", sum(!is.na(age))))
   return(clean_list)
+  data$age[clean_list] <- NA
 }
 
 clean_continuous <- function(var, var_name, minv, maxv) {
@@ -275,3 +276,35 @@ clean_cat <- function(var, var_name) {
   return(clean_list)
 }
 
+
+print_cleaned <- function(var) {
+  print(paste("Percentage Cleaned (No. of cleaned/No. of non-NAs):",var,"(%)"))
+  if (length(clean_list)==0) {
+    print("No records cleaned")
+  } else {
+    cln.table <- table(data[clnList,]$id_study)/table(data[!is.na(data[var]),]$id_study)*100
+    print(sort(round(cln.table[which(cln.table!=Inf&cln.table>0)],2), decreasing=TRUE))
+  }
+} # Create a function that will output success rate for each variable per study in the log file
+
+# List of column prefixes
+
+data <- subset(data, select = -c(sbp4, sbp5, sbp6, sbp7, sbp8, sbp9, sbp10, sbp11, sbp12, sbp13, sbp_avg))
+
+clean_missing_bp_col <-function(){
+  
+  sbp_prefixes <- c("sbp4", "sbp5", "sbp6", "sbp7", "sbp8", "sbp9", "sbp10", "sbp11", "sbp12", "sbp13", "sbp_avg")
+  
+  # Iterate over each prefix and check if the corresponding columns exist in the data
+  for (prefix in sbp_prefixes) {
+    sbp_col <- paste0(prefix)
+    dbp_col <- paste0("dbp", substr(prefix, 4, 5))
+    if (!(prefix %in% names(data))) {
+      data[[prefix]] <- data[[sbp_col]] <- data[[dbp_col]] <- NA
+    }
+  }
+  data<-subset(data, select = -c(dbp_a))
+  return(data)
+}
+
+data<-clean_missing_bp_col()

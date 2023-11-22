@@ -53,3 +53,6 @@ dhs   <- subset(dhs,dhs$id_study%in%bp_list)
 data <- rbind.fill(data,dhs,steps) # combine all STEPS, DHS and individual data together 
 rm(dhs,steps)
 data$id_study <- as.factor(data$id_study)
+
+data$dropped <- ""
+data$excluded <- 0
