@@ -274,3 +274,4 @@ clean_cat <- function(var, var_name) {
   print(paste("Number of", var_name, "data recoded as NA:", length(clean_list), "of", sum(!is.na(var))))
   return(clean_list)
 }
+

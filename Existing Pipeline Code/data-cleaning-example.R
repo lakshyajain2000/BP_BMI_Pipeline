@@ -1,11 +1,11 @@
 
 library(tidyverse)
 
-source("S:/Projects/HeightProject/Templates/Code-standardisation/R/data-handling/cleaning_functions.R")
+source("/Volumes/HeightProject/Templates/Code-standardisation/R/data-handling/cleaning_functions.R")
 
-d <- readRDS("S:/Projects/HeightProject/Original dataset/Data/Surveys/Extracted survey/Merged/individual_extracted_latest.RDS")
-steps <- readRDS("S:/Projects/HeightProject/Original dataset/Data/Surveys/STEPS/STEPSdata_GLU_BP_chol_formatted_latest.RDS")
-dhs <- readRDS("S:/Projects/HeightProject/Original dataset/Data/Surveys/DHS/DHS-formatted_latest.RDS")
+d <- readRDS("/Volumes/HeightProject/Original dataset/Data/Surveys/Extracted survey/Merged/individual_extracted_latest.RDS")
+steps <- readRDS("/Volumes/HeightProject/Original dataset/Data/Surveys/STEPS/STEPSdata_GLU_BP_chol_formatted_latest.RDS")
+dhs <- readRDS("/Volumes/HeightProject/Original dataset/Data/Surveys/DHS/DHS-formatted_latest.RDS")
 
 for (v in c('psu','stratum','edu','birth_y','birth_m','is_pregnant','is_urban'))
     steps[[v]] <- as.numeric(steps[[v]])
