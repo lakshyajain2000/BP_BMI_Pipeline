@@ -303,8 +303,7 @@ clean_missing_bp_col <-function(){
       data[[prefix]] <- data[[sbp_col]] <- data[[dbp_col]] <- NA
     }
   }
-  data<-subset(data, select = -c(dbp_a))
   return(data)
 }
 
-data<-clean_missing_bp_col()
+

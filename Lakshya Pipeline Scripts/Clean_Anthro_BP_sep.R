@@ -43,7 +43,8 @@ print(sort(round(age.out[which(age.out>0)],2), decreasing=TRUE))
 
 # Add NA columns for missing blood pressure measurements
 
-bp_missing<-clean_missing_bp_col()
+data<-clean_missing_bp_col()
+data<-subset(data, select =-c(dbp_a))
 
 
 
