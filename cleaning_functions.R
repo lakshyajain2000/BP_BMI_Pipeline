@@ -282,21 +282,20 @@ print_cleaned <- function(var) {
   if (length(clean_list)==0) {
     print("No records cleaned")
   } else {
-    cln.table <- table(data[clnList,]$id_study)/table(data[!is.na(data[var]),]$id_study)*100
+    cln.table <- table(data[clean_list,]$id_study)/table(data[!is.na(data[var]),]$id_study)*100
     print(sort(round(cln.table[which(cln.table!=Inf&cln.table>0)],2), decreasing=TRUE))
   }
 } # Create a function that will output success rate for each variable per study in the log file
 
-# List of column prefixes
+# Add NA for missing BP measurements
 
-data <- subset(data, select = -c(sbp4, sbp5, sbp6, sbp7, sbp8, sbp9, sbp10, sbp11, sbp12, sbp13, sbp_avg))
 
 clean_missing_bp_col <-function(){
   
-  sbp_prefixes <- c("sbp4", "sbp5", "sbp6", "sbp7", "sbp8", "sbp9", "sbp10", "sbp11", "sbp12", "sbp13", "sbp_avg")
+  sbp_missing_prefixes <- c("sbp4", "sbp5", "sbp6", "sbp7", "sbp8", "sbp9", "sbp10", "sbp11", "sbp12", "sbp13", "sbp_avg")
   
   # Iterate over each prefix and check if the corresponding columns exist in the data
-  for (prefix in sbp_prefixes) {
+  for (prefix in sbp_missing_prefixes) {
     sbp_col <- paste0(prefix)
     dbp_col <- paste0("dbp", substr(prefix, 4, 5))
     if (!(prefix %in% names(data))) {
@@ -306,4 +305,30 @@ clean_missing_bp_col <-function(){
   return(data)
 }
 
+# Clean sbp values outside of plausible range
 
+add_sbp_f <- function(){
+  
+  sbp_prefixes <- c("sbp1", "sbp2","sbp3", "sbp4", "sbp5", "sbp6", "sbp7", "sbp8", "sbp9", "sbp10", "sbp11", "sbp12", "sbp13", "sbp_avg")
+  
+  for (prefix in sbp_prefixes){
+    sbp_col_f <- paste0(prefix, "_f")
+    data[[sbp_col_f]] <- data[[prefix]]
+  }
+  return(data)
+}  
+
+# Clean dbp values outside of plausible range
+
+add_dbp_f <- function(){
+  
+  dbp_prefixes <- c("dbp1", "dbp2","dbp3", "dbp4", "dbp5", "dbp6", "dbp7", "dbp8", "dbp9", "dbp10", "dbp11", "dbp12", "dbp13", "dbp_avg")
+  
+  for (prefix in dbp_prefixes){
+    dbp_col_f <- paste0(prefix, "_f")
+    data[[dbp_col_f]] <- data[[prefix]]
+  }
+  return(data)
+}  
+
+ 

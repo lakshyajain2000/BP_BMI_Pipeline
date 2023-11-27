@@ -60,15 +60,15 @@ levels(data$unit_bp) <- c("mmHg", "EXCLUDE")
 #data$dropped <- ""
 #data$excluded <- 0
 
-#print_cleaned <- function(var) {
- # print(paste("Percentage Cleaned (No. of cleaned/No. of non-NAs):",var,"(%)"))
-#  if (length(clnList)==0) {
+print_cleaned <- function(var) {
+  print(paste("Percentage Cleaned (No. of cleaned/No. of non-NAs):",var,"(%)"))
+  if (length(clnList)==0) {
     print("No records cleaned")
-#  } else {
-#    cln.table <- table(data[clnList,]$id_study)/table(data[!is.na(data[var]),]$id_study)*100
-#    print(sort(round(cln.table[which(cln.table!=Inf&cln.table>0)],2), decreasing=TRUE))
-#  }
-#} # Create a function that will output success rate for each variable per study in the log file
+  } else {
+    cln.table <- table(data[clnList,]$id_study)/table(data[!is.na(data[var]),]$id_study)*100
+    print(sort(round(cln.table[which(cln.table!=Inf&cln.table>0)],2), decreasing=TRUE))
+  }
+} # Create a function that will output success rate for each variable per study in the log file
 
 
 # 1. Clean age for 0-120, set the rest to missing  ==============================================
@@ -99,8 +99,8 @@ levels(data$unit_bp) <- c("mmHg", "EXCLUDE")
 ##data$age <- floor(data$age)
 # Mark Dropped
 #clnList <- with(data,
-                which((sex=="male"&((is.na(age_max_bp_M)|age>age_max_bp_M)|(is.na(age_min_bp_M)|age<age_min_bp_M))) |
-                        (sex=="female"&((is.na(age_max_bp_F)|age>age_max_bp_F)|(is.na(age_min_bp_F)|age<age_min_bp_F))) ) )
+          #      which((sex=="male"&((is.na(age_max_bp_M)|age>age_max_bp_M)|(is.na(age_min_bp_M)|age<age_min_bp_M))) |
+          #              (sex=="female"&((is.na(age_max_bp_F)|age>age_max_bp_F)|(is.na(age_min_bp_F)|age<age_min_bp_F))) ) )
 #data$dropped[clnList] <- paste(data$dropped[clnList], "DesignAge")
 
 # print out
@@ -125,345 +125,345 @@ levels(data$unit_bp) <- c("mmHg", "EXCLUDE")
 #if (!"sbp_avg"%in%names(data))  data$sbp_avg <- data$dbp_avg <- NA
 
 ### a. sbp ------------------------------------------------------------------
-max_sbp <- 270
-min_sbp <- 70
-
-N_sbp <- 0
-N_sbp_cleaned <- 0
-sbp_cleaned <- c()
-
-data$sbp1_f <- data$sbp1
-data$sbp1_f[which(data$sbp1_f<=0|data$sbp1_f%in%c(777,888,994,995,996,999))] <- NA # removing all negative values and common missing value entries
-clnList <- which(data$sbp1_f>max_sbp | data$sbp1_f<min_sbp) # flagging all entries whose values that are outside the plausible range
-N_sbp <- N_sbp + sum(!is.na(data$sbp1_f)) # number of people left are those who don't have NA for this variable - ie they didnt have NA before and their entry hasnt become NA for being implausible
-N_sbp_cleaned <- N_sbp_cleaned + length(clnList) # number of people that have become NA because their values were outside the plausible range
-sbp_cleaned <- c(sbp_cleaned, data$sbp1_f[clnList]) 
-print_cleaned("sbp1_f")
-data$sbp1_f[clnList] <- NA # Make all the implausible values NA
-data$sbp1_f[which(data$unit_bp=="EXCLUDE")] <- NA # Make the values which have already be decided to be excluded to be NA
-
-data$sbp2_f <- data$sbp2
-data$sbp2_f[which(data$sbp2_f<=0|data$sbp2_f%in%c(777,888,994,995,996,999))] <- NA
-clnList <- which(data$sbp2_f>max_sbp | data$sbp2_f<min_sbp)
-N_sbp <- N_sbp + sum(!is.na(data$sbp2_f))
-N_sbp_cleaned <- N_sbp_cleaned + length(clnList)
-sbp_cleaned <- c(sbp_cleaned, data$sbp2_f[clnList])
-print_cleaned("sbp2_f")
-data$sbp2_f[clnList] <- NA
-data$sbp2_f[which(data$unit_bp=="EXCLUDE")] <- NA
-
-data$sbp3_f <- data$sbp3
-data$sbp3_f[which(data$sbp3_f<=0|data$sbp3_f%in%c(777,888,994,995,996,999))] <- NA
-clnList <- which(data$sbp3_f>max_sbp | data$sbp3_f<min_sbp)
-N_sbp <- N_sbp + sum(!is.na(data$sbp3_f))
-N_sbp_cleaned <- N_sbp_cleaned + length(clnList)
-sbp_cleaned <- c(sbp_cleaned, data$sbp3_f[clnList])
-print_cleaned("sbp3_f")
-data$sbp3_f[clnList] <- NA
-data$sbp3_f[which(data$unit_bp=="EXCLUDE")] <- NA
-
-data$sbp4_f <- data$sbp4
-data$sbp4_f[which(data$sbp4_f<=0|data$sbp4_f%in%c(777,888,994,995,996,999))] <- NA
-clnList <- which(data$sbp4_f>max_sbp | data$sbp4_f<min_sbp)
-N_sbp <- N_sbp + sum(!is.na(data$sbp4_f))
-N_sbp_cleaned <- N_sbp_cleaned + length(clnList)
-sbp_cleaned <- c(sbp_cleaned, data$sbp4_f[clnList])
-print_cleaned("sbp4_f")
-data$sbp4_f[clnList] <- NA
-data$sbp4_f[which(data$unit_bp=="EXCLUDE")] <- NA
-
-data$sbp5_f <- data$sbp5
-data$sbp5_f[which(data$sbp5_f<=0|data$sbp5_f%in%c(777,888,994,995,996,999))] <- NA
-clnList <- which(data$sbp5_f>max_sbp | data$sbp5_f<min_sbp)
-N_sbp <- N_sbp + sum(!is.na(data$sbp5_f))
-N_sbp_cleaned <- N_sbp_cleaned + length(clnList)
-sbp_cleaned <- c(sbp_cleaned, data$sbp5_f[clnList])
-print_cleaned("sbp5_f")
-data$sbp5_f[clnList] <- NA
-data$sbp5_f[which(data$unit_bp=="EXCLUDE")] <- NA
-
-data$sbp6_f <- data$sbp6
-data$sbp6_f[which(data$sbp6_f<=0|data$sbp6_f%in%c(777,888,994,995,996,999))] <- NA
-clnList <- which(data$sbp6_f>max_sbp | data$sbp6_f<min_sbp)
-N_sbp <- N_sbp + sum(!is.na(data$sbp6_f))
-N_sbp_cleaned <- N_sbp_cleaned + length(clnList)
-sbp_cleaned <- c(sbp_cleaned, data$sbp6_f[clnList])
-print_cleaned("sbp6_f")
-data$sbp6_f[clnList] <- NA
-data$sbp6_f[which(data$unit_bp=="EXCLUDE")] <- NA
-
-data$sbp7_f <- data$sbp7
-data$sbp7_f[which(data$sbp7_f<=0|data$sbp7_f%in%c(777,888,994,995,996,999))] <- NA
-clnList <- which(data$sbp7_f>max_sbp | data$sbp7_f<min_sbp)
-N_sbp <- N_sbp + sum(!is.na(data$sbp7_f))
-N_sbp_cleaned <- N_sbp_cleaned + length(clnList)
-sbp_cleaned <- c(sbp_cleaned, data$sbp7_f[clnList])
-print_cleaned("sbp7_f")
-data$sbp7_f[clnList] <- NA
-data$sbp7_f[which(data$unit_bp=="EXCLUDE")] <- NA
-
-data$sbp8_f <- data$sbp8
-data$sbp8_f[which(data$sbp8_f<=0|data$sbp8_f%in%c(777,888,994,995,996,999))] <- NA
-clnList <- which(data$sbp8_f>max_sbp | data$sbp8_f<min_sbp)
-N_sbp <- N_sbp + sum(!is.na(data$sbp8_f))
-N_sbp_cleaned <- N_sbp_cleaned + length(clnList)
-sbp_cleaned <- c(sbp_cleaned, data$sbp8_f[clnList])
-print_cleaned("sbp8_f")
-data$sbp8_f[clnList] <- NA
-data$sbp8_f[which(data$unit_bp=="EXCLUDE")] <- NA
-
-data$sbp9_f <- data$sbp9
-data$sbp9_f[which(data$sbp9_f<=0|data$sbp9_f%in%c(777,888,994,995,996,999))] <- NA
-clnList <- which(data$sbp9_f>max_sbp | data$sbp9_f<min_sbp)
-N_sbp <- N_sbp + sum(!is.na(data$sbp9_f))
-N_sbp_cleaned <- N_sbp_cleaned + length(clnList)
-sbp_cleaned <- c(sbp_cleaned, data$sbp9_f[clnList])
-print_cleaned("sbp9_f")
-data$sbp9_f[clnList] <- NA
-data$sbp9_f[which(data$unit_bp=="EXCLUDE")] <- NA
-
-data$sbp10_f <- data$sbp10
-data$sbp10_f[which(data$sbp10_f<=0|data$sbp10_f%in%c(777,888,994,995,996,999))] <- NA
-clnList <- which(data$sbp10_f>max_sbp | data$sbp10_f<min_sbp)
-N_sbp <- N_sbp + sum(!is.na(data$sbp10_f))
-N_sbp_cleaned <- N_sbp_cleaned + length(clnList)
-sbp_cleaned <- c(sbp_cleaned, data$sbp10_f[clnList])
-print_cleaned("sbp10_f")
-data$sbp10_f[clnList] <- NA
-data$sbp10_f[which(data$unit_bp=="EXCLUDE")] <- NA
-
-data$sbp11_f <- data$sbp11
-data$sbp11_f[which(data$sbp11_f<=0|data$sbp11_f%in%c(777,888,994,995,996,999))] <- NA # common code for missing data - need to be variable specific
-clnList <- which(data$sbp11_f>max_sbp | data$sbp11_f<min_sbp)
-N_sbp <- N_sbp + sum(!is.na(data$sbp11_f))
-N_sbp_cleaned <- N_sbp_cleaned + length(clnList)
-sbp_cleaned <- c(sbp_cleaned, data$sbp11_f[clnList])
-print_cleaned("sbp11_f")
-data$sbp11_f[clnList] <- NA
-data$sbp11_f[which(data$unit_bp=="EXCLUDE")] <- NA
-
-data$sbp12_f <- data$sbp12
-data$sbp12_f[which(data$sbp12_f<=0|data$sbp12_f%in%c(777,888,994,995,996,999))] <- NA
-clnList <- which(data$sbp12_f>max_sbp | data$sbp12_f<min_sbp)
-N_sbp <- N_sbp + sum(!is.na(data$sbp12_f))
-N_sbp_cleaned <- N_sbp_cleaned + length(clnList)
-sbp_cleaned <- c(sbp_cleaned, data$sbp12_f[clnList])
-print_cleaned("sbp12_f")
-data$sbp12_f[clnList] <- NA
-data$sbp12_f[which(data$unit_bp=="EXCLUDE")] <- NA
-
-data$sbp13_f <- data$sbp13
-data$sbp13_f[which(data$sbp13_f<=0|data$sbp13_f%in%c(777,888,994,995,996,999))] <- NA
-clnList <- which(data$sbp13_f>max_sbp | data$sbp13_f<min_sbp)
-N_sbp <- N_sbp + sum(!is.na(data$sbp13_f))
-N_sbp_cleaned <- N_sbp_cleaned + length(clnList)
-sbp_cleaned <- c(sbp_cleaned, data$sbp13_f[clnList])
-print_cleaned("sbp13_f")
-data$sbp13_f[clnList] <- NA
-data$sbp13_f[which(data$unit_bp=="EXCLUDE")] <- NA
-
-data$sbp_avg_f <- data$sbp_avg
-data$sbp_avg_f[which(data$sbp_avg_f<=0|data$sbp_avg_f%in%c(777,888,994,995,996,999))] <- NA
-clnList <- which(data$sbp_avg_f>max_sbp | data$sbp_avg_f<min_sbp)
-N_sbp <- N_sbp + sum(!is.na(data$sbp_avg_f))
-N_sbp_cleaned <- N_sbp_cleaned + length(clnList)
-sbp_cleaned <- c(sbp_cleaned, data$sbp_avg_f[clnList])
-print_cleaned("sbp_avg_f")
-data$sbp_avg_f[clnList] <- NA
-data$sbp_avg_f[which(data$unit_bp=="EXCLUDE")] <- NA
-
-print("Excluded SBP data outside of the plausible range")
-print(paste0(signif(N_sbp_cleaned/N_sbp, digit=3)*100, "%")) # Calculating the percentage of data points dropped because they were outside of the range 
-print(table(round(sbp_cleaned))) 
-
-### b.dbp ------------------------------------------------------------------
-max_dbp <- 150
-min_dbp <- 30
-
-N_dbp <- 0
-N_dbp_cleaned <- 0
-dbp_cleaned <- c()
-
-data$dbp1_f <- data$dbp1
-data$dbp1_f[which(data$dbp1_f<=0|data$dbp1_f%in%c(222,666,888,994,995,996,999,1000,9999))] <- NA
-clnList <- which(data$dbp1_f>max_dbp | data$dbp1_f<min_dbp)
-N_dbp <- N_dbp + sum(!is.na(data$dbp1_f))
-N_dbp_cleaned <- N_dbp_cleaned + length(clnList)
-dbp_cleaned <- c(dbp_cleaned, data$dbp1_f[clnList])
-print_cleaned("dbp1_f")
-data$dbp1_f[clnList] <- NA
-data$dbp1_f[which(data$unit_bp=="EXCLUDE")] <- NA
-
-data$dbp2_f <- data$dbp2
-data$dbp2_f[which(data$dbp2_f<=0|data$dbp2_f%in%c(222,666,888,994,995,996,999,1000,9999))] <- NA
-clnList <- which(data$dbp2_f>max_dbp | data$dbp2_f<min_dbp)
-N_dbp <- N_dbp + sum(!is.na(data$dbp2_f))
-N_dbp_cleaned <- N_dbp_cleaned + length(clnList)
-dbp_cleaned <- c(dbp_cleaned, data$dbp2_f[clnList])
-print_cleaned("dbp2_f")
-data$dbp2_f[clnList] <- NA
-data$dbp2_f[which(data$unit_bp=="EXCLUDE")] <- NA
-
-data$dbp3_f <- data$dbp3
-data$dbp3_f[which(data$dbp3_f<=0|data$dbp3_f%in%c(222,666,888,994,995,996,999,1000,9999))] <- NA
-clnList <- which(data$dbp3_f>max_dbp | data$dbp3_f<min_dbp)
-N_dbp <- N_dbp + sum(!is.na(data$dbp3_f))
-N_dbp_cleaned <- N_dbp_cleaned + length(clnList)
-dbp_cleaned <- c(dbp_cleaned, data$dbp3_f[clnList])
-print_cleaned("dbp3_f")
-data$dbp3_f[clnList] <- NA
-data$dbp3_f[which(data$unit_bp=="EXCLUDE")] <- NA
-
-data$dbp4_f <- data$dbp4
-data$dbp4_f[which(data$dbp4_f<=0|data$dbp4_f%in%c(222,666,888,994,995,996,999,1000,9999))] <- NA
-clnList <- which(data$dbp4_f>max_dbp | data$dbp4_f<min_dbp)
-N_dbp <- N_dbp + sum(!is.na(data$dbp4_f))
-N_dbp_cleaned <- N_dbp_cleaned + length(clnList)
-dbp_cleaned <- c(dbp_cleaned, data$dbp4_f[clnList])
-print_cleaned("dbp4_f")
-data$dbp4_f[clnList] <- NA
-data$dbp4_f[which(data$unit_bp=="EXCLUDE")] <- NA
-
-data$dbp5_f <- data$dbp5
-data$dbp5_f[which(data$dbp5_f<=0|data$dbp5_f%in%c(222,666,888,994,995,996,999,1000,9999))] <- NA
-clnList <- which(data$dbp5_f>max_dbp | data$dbp5_f<min_dbp)
-N_dbp <- N_dbp + sum(!is.na(data$dbp5_f))
-N_dbp_cleaned <- N_dbp_cleaned + length(clnList)
-dbp_cleaned <- c(dbp_cleaned, data$dbp5_f[clnList])
-print_cleaned("dbp5_f")
-data$dbp5_f[clnList] <- NA
-data$dbp5_f[which(data$unit_bp=="EXCLUDE")] <- NA
-
-data$dbp6_f <- data$dbp6
-data$dbp6_f[which(data$dbp6_f<=0|data$dbp6_f%in%c(222,666,888,994,995,996,999,1000,9999))] <- NA
-clnList <- which(data$dbp6_f>max_dbp | data$dbp6_f<min_dbp)
-N_dbp <- N_dbp + sum(!is.na(data$dbp6_f))
-N_dbp_cleaned <- N_dbp_cleaned + length(clnList)
-dbp_cleaned <- c(dbp_cleaned, data$dbp6_f[clnList])
-print_cleaned("dbp6_f")
-data$dbp6_f[clnList] <- NA
-data$dbp6_f[which(data$unit_bp=="EXCLUDE")] <- NA
-
-data$dbp7_f <- data$dbp7
-data$dbp7_f[which(data$dbp7_f<=0|data$dbp7_f%in%c(222,666,888,994,995,996,999,1000,9999))] <- NA
-clnList <- which(data$dbp7_f>max_dbp | data$dbp7_f<min_dbp)
-N_dbp <- N_dbp + sum(!is.na(data$dbp7_f))
-N_dbp_cleaned <- N_dbp_cleaned + length(clnList)
-dbp_cleaned <- c(dbp_cleaned, data$dbp7_f[clnList])
-print_cleaned("dbp7_f")
-data$dbp7_f[clnList] <- NA
-data$dbp7_f[which(data$unit_bp=="EXCLUDE")] <- NA
-
-data$dbp8_f <- data$dbp8
-data$dbp8_f[which(data$dbp8_f<=0|data$dbp8_f%in%c(222,666,888,994,995,996,999,1000,9999))] <- NA
-clnList <- which(data$dbp8_f>max_dbp | data$dbp8_f<min_dbp)
-N_dbp <- N_dbp + sum(!is.na(data$dbp8_f))
-N_dbp_cleaned <- N_dbp_cleaned + length(clnList)
-dbp_cleaned <- c(dbp_cleaned, data$dbp8_f[clnList])
-print_cleaned("dbp8_f")
-data$dbp8_f[clnList] <- NA
-data$dbp8_f[which(data$unit_bp=="EXCLUDE")] <- NA
-
-data$dbp9_f <- data$dbp9
-data$dbp9_f[which(data$dbp9_f<=0|data$dbp9_f%in%c(222,666,888,994,995,996,999,1000,9999))] <- NA
-clnList <- which(data$dbp9_f>max_dbp | data$dbp9_f<min_dbp)
-N_dbp <- N_dbp + sum(!is.na(data$dbp9_f))
-N_dbp_cleaned <- N_dbp_cleaned + length(clnList)
-dbp_cleaned <- c(dbp_cleaned, data$dbp9_f[clnList])
-print_cleaned("dbp9_f")
-data$dbp9_f[clnList] <- NA
-data$dbp9_f[which(data$unit_bp=="EXCLUDE")] <- NA
-
-data$dbp10_f <- data$dbp10
-data$dbp10_f[which(data$dbp10_f<=0|data$dbp10_f%in%c(222,666,888,994,995,996,999,1000,9999))] <- NA
-clnList <- which(data$dbp10_f>max_dbp | data$dbp10_f<min_dbp)
-N_dbp <- N_dbp + sum(!is.na(data$dbp10_f))
-N_dbp_cleaned <- N_dbp_cleaned + length(clnList)
-dbp_cleaned <- c(dbp_cleaned, data$dbp10_f[clnList])
-print_cleaned("dbp10_f")
-data$dbp10_f[clnList] <- NA
-data$dbp10_f[which(data$unit_bp=="EXCLUDE")] <- NA
-
-data$dbp11_f <- data$dbp11
-data$dbp11_f[which(data$dbp11_f<=0|data$dbp11_f%in%c(222,666,888,994,995,996,999,1000,9999))] <- NA
-clnList <- which(data$dbp11_f>max_dbp | data$dbp11_f<min_dbp)
-N_dbp <- N_dbp + sum(!is.na(data$dbp11_f))
-N_dbp_cleaned <- N_dbp_cleaned + length(clnList)
-dbp_cleaned <- c(dbp_cleaned, data$dbp11_f[clnList])
-print_cleaned("dbp11_f")
-data$dbp11_f[clnList] <- NA
-data$dbp11_f[which(data$unit_bp=="EXCLUDE")] <- NA
-
-data$dbp12_f <- data$dbp12
-data$dbp12_f[which(data$dbp12_f<=0|data$dbp12_f%in%c(222,666,888,994,995,996,999,1000,9999))] <- NA
-clnList <- which(data$dbp12_f>max_dbp | data$dbp12_f<min_dbp)
-N_dbp <- N_dbp + sum(!is.na(data$dbp12_f))
-N_dbp_cleaned <- N_dbp_cleaned + length(clnList)
-dbp_cleaned <- c(dbp_cleaned, data$dbp12_f[clnList])
-print_cleaned("dbp12_f")
-data$dbp12_f[clnList] <- NA
-data$dbp12_f[which(data$unit_bp=="EXCLUDE")] <- NA
-
-data$dbp13_f <- data$dbp13
-data$dbp13_f[which(data$dbp13_f<=0|data$dbp13_f%in%c(222,666,888,994,995,996,999,1000,9999))] <- NA
-clnList <- which(data$dbp13_f>max_dbp | data$dbp13_f<min_dbp)
-N_dbp <- N_dbp + sum(!is.na(data$dbp13_f))
-N_dbp_cleaned <- N_dbp_cleaned + length(clnList)
-dbp_cleaned <- c(dbp_cleaned, data$dbp13_f[clnList])
-print_cleaned("dbp13_f")
-data$dbp13_f[clnList] <- NA
-data$dbp13_f[which(data$unit_bp=="EXCLUDE")] <- NA
-
-data$dbp_avg_f <- data$dbp_avg
-data$dbp_avg_f[which(data$dbp_avg_f<=0|data$dbp_avg_f%in%c(222,666,888,994,995,996,999,1000,9999))] <- NA
-clnList <- which(data$dbp_avg_f>max_dbp | data$dbp_avg_f<min_dbp)
-N_dbp <- N_dbp + sum(!is.na(data$dbp_avg_f))
-N_dbp_cleaned <- N_dbp_cleaned + length(clnList)
-dbp_cleaned <- c(dbp_cleaned, data$dbp_avg_f[clnList])
-print_cleaned("dbp_avg_f")
-data$dbp_avg_f[clnList] <- NA
-data$dbp_avg_f[which(data$unit_bp=="EXCLUDE")] <- NA
-
-print("Excluded DBP data outside of the plausible range")
-print(paste0(signif(N_dbp_cleaned/N_dbp, digit=3)*100,"%"))
-print(table(round(dbp_cleaned)))
+# max_sbp <- 270
+# min_sbp <- 70
+# 
+# N_sbp <- 0
+# N_sbp_cleaned <- 0
+# sbp_cleaned <- c()
+# 
+# data$sbp1_f <- data$sbp1
+# data$sbp1_f[which(data$sbp1_f<=0|data$sbp1_f%in%c(777,888,994,995,996,999))] <- NA # removing all negative values and common missing value entries
+# clnList <- which(data$sbp1_f>max_sbp | data$sbp1_f<min_sbp) # flagging all entries whose values that are outside the plausible range
+# N_sbp <- N_sbp + sum(!is.na(data$sbp1_f)) # number of people left are those who don't have NA for this variable - ie they didnt have NA before and their entry hasnt become NA for being implausible
+# N_sbp_cleaned <- N_sbp_cleaned + length(clnList) # number of people that have become NA because their values were outside the plausible range
+# sbp_cleaned <- c(sbp_cleaned, data$sbp1_f[clnList]) 
+# print_cleaned("sbp1_f")
+# data$sbp1_f[clnList] <- NA # Make all the implausible values NA
+# data$sbp1_f[which(data$unit_bp=="EXCLUDE")] <- NA # Make the values which have already be decided to be excluded to be NA
+# 
+# data$sbp2_f <- data$sbp2
+# data$sbp2_f[which(data$sbp2_f<=0|data$sbp2_f%in%c(777,888,994,995,996,999))] <- NA
+# clnList <- which(data$sbp2_f>max_sbp | data$sbp2_f<min_sbp)
+# N_sbp <- N_sbp + sum(!is.na(data$sbp2_f))
+# N_sbp_cleaned <- N_sbp_cleaned + length(clnList)
+# sbp_cleaned <- c(sbp_cleaned, data$sbp2_f[clnList])
+# print_cleaned("sbp2_f")
+# data$sbp2_f[clnList] <- NA
+# data$sbp2_f[which(data$unit_bp=="EXCLUDE")] <- NA
+# 
+# data$sbp3_f <- data$sbp3
+# data$sbp3_f[which(data$sbp3_f<=0|data$sbp3_f%in%c(777,888,994,995,996,999))] <- NA
+# clnList <- which(data$sbp3_f>max_sbp | data$sbp3_f<min_sbp)
+# N_sbp <- N_sbp + sum(!is.na(data$sbp3_f))
+# N_sbp_cleaned <- N_sbp_cleaned + length(clnList)
+# sbp_cleaned <- c(sbp_cleaned, data$sbp3_f[clnList])
+# print_cleaned("sbp3_f")
+# data$sbp3_f[clnList] <- NA
+# data$sbp3_f[which(data$unit_bp=="EXCLUDE")] <- NA
+# 
+# data$sbp4_f <- data$sbp4
+# data$sbp4_f[which(data$sbp4_f<=0|data$sbp4_f%in%c(777,888,994,995,996,999))] <- NA
+# clnList <- which(data$sbp4_f>max_sbp | data$sbp4_f<min_sbp)
+# N_sbp <- N_sbp + sum(!is.na(data$sbp4_f))
+# N_sbp_cleaned <- N_sbp_cleaned + length(clnList)
+# sbp_cleaned <- c(sbp_cleaned, data$sbp4_f[clnList])
+# print_cleaned("sbp4_f")
+# data$sbp4_f[clnList] <- NA
+# data$sbp4_f[which(data$unit_bp=="EXCLUDE")] <- NA
+# 
+# data$sbp5_f <- data$sbp5
+# data$sbp5_f[which(data$sbp5_f<=0|data$sbp5_f%in%c(777,888,994,995,996,999))] <- NA
+# clnList <- which(data$sbp5_f>max_sbp | data$sbp5_f<min_sbp)
+# N_sbp <- N_sbp + sum(!is.na(data$sbp5_f))
+# N_sbp_cleaned <- N_sbp_cleaned + length(clnList)
+# sbp_cleaned <- c(sbp_cleaned, data$sbp5_f[clnList])
+# print_cleaned("sbp5_f")
+# data$sbp5_f[clnList] <- NA
+# data$sbp5_f[which(data$unit_bp=="EXCLUDE")] <- NA
+# 
+# data$sbp6_f <- data$sbp6
+# data$sbp6_f[which(data$sbp6_f<=0|data$sbp6_f%in%c(777,888,994,995,996,999))] <- NA
+# clnList <- which(data$sbp6_f>max_sbp | data$sbp6_f<min_sbp)
+# N_sbp <- N_sbp + sum(!is.na(data$sbp6_f))
+# N_sbp_cleaned <- N_sbp_cleaned + length(clnList)
+# sbp_cleaned <- c(sbp_cleaned, data$sbp6_f[clnList])
+# print_cleaned("sbp6_f")
+# data$sbp6_f[clnList] <- NA
+# data$sbp6_f[which(data$unit_bp=="EXCLUDE")] <- NA
+# 
+# data$sbp7_f <- data$sbp7
+# data$sbp7_f[which(data$sbp7_f<=0|data$sbp7_f%in%c(777,888,994,995,996,999))] <- NA
+# clnList <- which(data$sbp7_f>max_sbp | data$sbp7_f<min_sbp)
+# N_sbp <- N_sbp + sum(!is.na(data$sbp7_f))
+# N_sbp_cleaned <- N_sbp_cleaned + length(clnList)
+# sbp_cleaned <- c(sbp_cleaned, data$sbp7_f[clnList])
+# print_cleaned("sbp7_f")
+# data$sbp7_f[clnList] <- NA
+# data$sbp7_f[which(data$unit_bp=="EXCLUDE")] <- NA
+# 
+# data$sbp8_f <- data$sbp8
+# data$sbp8_f[which(data$sbp8_f<=0|data$sbp8_f%in%c(777,888,994,995,996,999))] <- NA
+# clnList <- which(data$sbp8_f>max_sbp | data$sbp8_f<min_sbp)
+# N_sbp <- N_sbp + sum(!is.na(data$sbp8_f))
+# N_sbp_cleaned <- N_sbp_cleaned + length(clnList)
+# sbp_cleaned <- c(sbp_cleaned, data$sbp8_f[clnList])
+# print_cleaned("sbp8_f")
+# data$sbp8_f[clnList] <- NA
+# data$sbp8_f[which(data$unit_bp=="EXCLUDE")] <- NA
+# 
+# data$sbp9_f <- data$sbp9
+# data$sbp9_f[which(data$sbp9_f<=0|data$sbp9_f%in%c(777,888,994,995,996,999))] <- NA
+# clnList <- which(data$sbp9_f>max_sbp | data$sbp9_f<min_sbp)
+# N_sbp <- N_sbp + sum(!is.na(data$sbp9_f))
+# N_sbp_cleaned <- N_sbp_cleaned + length(clnList)
+# sbp_cleaned <- c(sbp_cleaned, data$sbp9_f[clnList])
+# print_cleaned("sbp9_f")
+# data$sbp9_f[clnList] <- NA
+# data$sbp9_f[which(data$unit_bp=="EXCLUDE")] <- NA
+# 
+# data$sbp10_f <- data$sbp10
+# data$sbp10_f[which(data$sbp10_f<=0|data$sbp10_f%in%c(777,888,994,995,996,999))] <- NA
+# clnList <- which(data$sbp10_f>max_sbp | data$sbp10_f<min_sbp)
+# N_sbp <- N_sbp + sum(!is.na(data$sbp10_f))
+# N_sbp_cleaned <- N_sbp_cleaned + length(clnList)
+# sbp_cleaned <- c(sbp_cleaned, data$sbp10_f[clnList])
+# print_cleaned("sbp10_f")
+# data$sbp10_f[clnList] <- NA
+# data$sbp10_f[which(data$unit_bp=="EXCLUDE")] <- NA
+# 
+# data$sbp11_f <- data$sbp11
+# data$sbp11_f[which(data$sbp11_f<=0|data$sbp11_f%in%c(777,888,994,995,996,999))] <- NA # common code for missing data - need to be variable specific
+# clnList <- which(data$sbp11_f>max_sbp | data$sbp11_f<min_sbp)
+# N_sbp <- N_sbp + sum(!is.na(data$sbp11_f))
+# N_sbp_cleaned <- N_sbp_cleaned + length(clnList)
+# sbp_cleaned <- c(sbp_cleaned, data$sbp11_f[clnList])
+# print_cleaned("sbp11_f")
+# data$sbp11_f[clnList] <- NA
+# data$sbp11_f[which(data$unit_bp=="EXCLUDE")] <- NA
+# 
+# data$sbp12_f <- data$sbp12
+# data$sbp12_f[which(data$sbp12_f<=0|data$sbp12_f%in%c(777,888,994,995,996,999))] <- NA
+# clnList <- which(data$sbp12_f>max_sbp | data$sbp12_f<min_sbp)
+# N_sbp <- N_sbp + sum(!is.na(data$sbp12_f))
+# N_sbp_cleaned <- N_sbp_cleaned + length(clnList)
+# sbp_cleaned <- c(sbp_cleaned, data$sbp12_f[clnList])
+# print_cleaned("sbp12_f")
+# data$sbp12_f[clnList] <- NA
+# data$sbp12_f[which(data$unit_bp=="EXCLUDE")] <- NA
+# 
+# data$sbp13_f <- data$sbp13
+# data$sbp13_f[which(data$sbp13_f<=0|data$sbp13_f%in%c(777,888,994,995,996,999))] <- NA
+# clnList <- which(data$sbp13_f>max_sbp | data$sbp13_f<min_sbp)
+# N_sbp <- N_sbp + sum(!is.na(data$sbp13_f))
+# N_sbp_cleaned <- N_sbp_cleaned + length(clnList)
+# sbp_cleaned <- c(sbp_cleaned, data$sbp13_f[clnList])
+# print_cleaned("sbp13_f")
+# data$sbp13_f[clnList] <- NA
+# data$sbp13_f[which(data$unit_bp=="EXCLUDE")] <- NA
+# 
+# data$sbp_avg_f <- data$sbp_avg
+# data$sbp_avg_f[which(data$sbp_avg_f<=0|data$sbp_avg_f%in%c(777,888,994,995,996,999))] <- NA
+# clnList <- which(data$sbp_avg_f>max_sbp | data$sbp_avg_f<min_sbp)
+# N_sbp <- N_sbp + sum(!is.na(data$sbp_avg_f))
+# N_sbp_cleaned <- N_sbp_cleaned + length(clnList)
+# sbp_cleaned <- c(sbp_cleaned, data$sbp_avg_f[clnList])
+# print_cleaned("sbp_avg_f")
+# data$sbp_avg_f[clnList] <- NA
+# data$sbp_avg_f[which(data$unit_bp=="EXCLUDE")] <- NA
+# 
+# print("Excluded SBP data outside of the plausible range")
+# print(paste0(signif(N_sbp_cleaned/N_sbp, digit=3)*100, "%")) # Calculating the percentage of data points dropped because they were outside of the range 
+# print(table(round(sbp_cleaned))) 
+# 
+# ### b.dbp ------------------------------------------------------------------
+# max_dbp <- 150
+# min_dbp <- 30
+# 
+# N_dbp <- 0
+# N_dbp_cleaned <- 0
+# dbp_cleaned <- c()
+# 
+# data$dbp1_f <- data$dbp1
+# data$dbp1_f[which(data$dbp1_f<=0|data$dbp1_f%in%c(222,666,888,994,995,996,999,1000,9999))] <- NA
+# clnList <- which(data$dbp1_f>max_dbp | data$dbp1_f<min_dbp)
+# N_dbp <- N_dbp + sum(!is.na(data$dbp1_f))
+# N_dbp_cleaned <- N_dbp_cleaned + length(clnList)
+# dbp_cleaned <- c(dbp_cleaned, data$dbp1_f[clnList])
+# print_cleaned("dbp1_f")
+# data$dbp1_f[clnList] <- NA
+# data$dbp1_f[which(data$unit_bp=="EXCLUDE")] <- NA
+# 
+# data$dbp2_f <- data$dbp2
+# data$dbp2_f[which(data$dbp2_f<=0|data$dbp2_f%in%c(222,666,888,994,995,996,999,1000,9999))] <- NA
+# clnList <- which(data$dbp2_f>max_dbp | data$dbp2_f<min_dbp)
+# N_dbp <- N_dbp + sum(!is.na(data$dbp2_f))
+# N_dbp_cleaned <- N_dbp_cleaned + length(clnList)
+# dbp_cleaned <- c(dbp_cleaned, data$dbp2_f[clnList])
+# print_cleaned("dbp2_f")
+# data$dbp2_f[clnList] <- NA
+# data$dbp2_f[which(data$unit_bp=="EXCLUDE")] <- NA
+# 
+# data$dbp3_f <- data$dbp3
+# data$dbp3_f[which(data$dbp3_f<=0|data$dbp3_f%in%c(222,666,888,994,995,996,999,1000,9999))] <- NA
+# clnList <- which(data$dbp3_f>max_dbp | data$dbp3_f<min_dbp)
+# N_dbp <- N_dbp + sum(!is.na(data$dbp3_f))
+# N_dbp_cleaned <- N_dbp_cleaned + length(clnList)
+# dbp_cleaned <- c(dbp_cleaned, data$dbp3_f[clnList])
+# print_cleaned("dbp3_f")
+# data$dbp3_f[clnList] <- NA
+# data$dbp3_f[which(data$unit_bp=="EXCLUDE")] <- NA
+# 
+# data$dbp4_f <- data$dbp4
+# data$dbp4_f[which(data$dbp4_f<=0|data$dbp4_f%in%c(222,666,888,994,995,996,999,1000,9999))] <- NA
+# clnList <- which(data$dbp4_f>max_dbp | data$dbp4_f<min_dbp)
+# N_dbp <- N_dbp + sum(!is.na(data$dbp4_f))
+# N_dbp_cleaned <- N_dbp_cleaned + length(clnList)
+# dbp_cleaned <- c(dbp_cleaned, data$dbp4_f[clnList])
+# print_cleaned("dbp4_f")
+# data$dbp4_f[clnList] <- NA
+# data$dbp4_f[which(data$unit_bp=="EXCLUDE")] <- NA
+# 
+# data$dbp5_f <- data$dbp5
+# data$dbp5_f[which(data$dbp5_f<=0|data$dbp5_f%in%c(222,666,888,994,995,996,999,1000,9999))] <- NA
+# clnList <- which(data$dbp5_f>max_dbp | data$dbp5_f<min_dbp)
+# N_dbp <- N_dbp + sum(!is.na(data$dbp5_f))
+# N_dbp_cleaned <- N_dbp_cleaned + length(clnList)
+# dbp_cleaned <- c(dbp_cleaned, data$dbp5_f[clnList])
+# print_cleaned("dbp5_f")
+# data$dbp5_f[clnList] <- NA
+# data$dbp5_f[which(data$unit_bp=="EXCLUDE")] <- NA
+# 
+# data$dbp6_f <- data$dbp6
+# data$dbp6_f[which(data$dbp6_f<=0|data$dbp6_f%in%c(222,666,888,994,995,996,999,1000,9999))] <- NA
+# clnList <- which(data$dbp6_f>max_dbp | data$dbp6_f<min_dbp)
+# N_dbp <- N_dbp + sum(!is.na(data$dbp6_f))
+# N_dbp_cleaned <- N_dbp_cleaned + length(clnList)
+# dbp_cleaned <- c(dbp_cleaned, data$dbp6_f[clnList])
+# print_cleaned("dbp6_f")
+# data$dbp6_f[clnList] <- NA
+# data$dbp6_f[which(data$unit_bp=="EXCLUDE")] <- NA
+# 
+# data$dbp7_f <- data$dbp7
+# data$dbp7_f[which(data$dbp7_f<=0|data$dbp7_f%in%c(222,666,888,994,995,996,999,1000,9999))] <- NA
+# clnList <- which(data$dbp7_f>max_dbp | data$dbp7_f<min_dbp)
+# N_dbp <- N_dbp + sum(!is.na(data$dbp7_f))
+# N_dbp_cleaned <- N_dbp_cleaned + length(clnList)
+# dbp_cleaned <- c(dbp_cleaned, data$dbp7_f[clnList])
+# print_cleaned("dbp7_f")
+# data$dbp7_f[clnList] <- NA
+# data$dbp7_f[which(data$unit_bp=="EXCLUDE")] <- NA
+# 
+# data$dbp8_f <- data$dbp8
+# data$dbp8_f[which(data$dbp8_f<=0|data$dbp8_f%in%c(222,666,888,994,995,996,999,1000,9999))] <- NA
+# clnList <- which(data$dbp8_f>max_dbp | data$dbp8_f<min_dbp)
+# N_dbp <- N_dbp + sum(!is.na(data$dbp8_f))
+# N_dbp_cleaned <- N_dbp_cleaned + length(clnList)
+# dbp_cleaned <- c(dbp_cleaned, data$dbp8_f[clnList])
+# print_cleaned("dbp8_f")
+# data$dbp8_f[clnList] <- NA
+# data$dbp8_f[which(data$unit_bp=="EXCLUDE")] <- NA
+# 
+# data$dbp9_f <- data$dbp9
+# data$dbp9_f[which(data$dbp9_f<=0|data$dbp9_f%in%c(222,666,888,994,995,996,999,1000,9999))] <- NA
+# clnList <- which(data$dbp9_f>max_dbp | data$dbp9_f<min_dbp)
+# N_dbp <- N_dbp + sum(!is.na(data$dbp9_f))
+# N_dbp_cleaned <- N_dbp_cleaned + length(clnList)
+# dbp_cleaned <- c(dbp_cleaned, data$dbp9_f[clnList])
+# print_cleaned("dbp9_f")
+# data$dbp9_f[clnList] <- NA
+# data$dbp9_f[which(data$unit_bp=="EXCLUDE")] <- NA
+# 
+# data$dbp10_f <- data$dbp10
+# data$dbp10_f[which(data$dbp10_f<=0|data$dbp10_f%in%c(222,666,888,994,995,996,999,1000,9999))] <- NA
+# clnList <- which(data$dbp10_f>max_dbp | data$dbp10_f<min_dbp)
+# N_dbp <- N_dbp + sum(!is.na(data$dbp10_f))
+# N_dbp_cleaned <- N_dbp_cleaned + length(clnList)
+# dbp_cleaned <- c(dbp_cleaned, data$dbp10_f[clnList])
+# print_cleaned("dbp10_f")
+# data$dbp10_f[clnList] <- NA
+# data$dbp10_f[which(data$unit_bp=="EXCLUDE")] <- NA
+# 
+# data$dbp11_f <- data$dbp11
+# data$dbp11_f[which(data$dbp11_f<=0|data$dbp11_f%in%c(222,666,888,994,995,996,999,1000,9999))] <- NA
+# clnList <- which(data$dbp11_f>max_dbp | data$dbp11_f<min_dbp)
+# N_dbp <- N_dbp + sum(!is.na(data$dbp11_f))
+# N_dbp_cleaned <- N_dbp_cleaned + length(clnList)
+# dbp_cleaned <- c(dbp_cleaned, data$dbp11_f[clnList])
+# print_cleaned("dbp11_f")
+# data$dbp11_f[clnList] <- NA
+# data$dbp11_f[which(data$unit_bp=="EXCLUDE")] <- NA
+# 
+# data$dbp12_f <- data$dbp12
+# data$dbp12_f[which(data$dbp12_f<=0|data$dbp12_f%in%c(222,666,888,994,995,996,999,1000,9999))] <- NA
+# clnList <- which(data$dbp12_f>max_dbp | data$dbp12_f<min_dbp)
+# N_dbp <- N_dbp + sum(!is.na(data$dbp12_f))
+# N_dbp_cleaned <- N_dbp_cleaned + length(clnList)
+# dbp_cleaned <- c(dbp_cleaned, data$dbp12_f[clnList])
+# print_cleaned("dbp12_f")
+# data$dbp12_f[clnList] <- NA
+# data$dbp12_f[which(data$unit_bp=="EXCLUDE")] <- NA
+# 
+# data$dbp13_f <- data$dbp13
+# data$dbp13_f[which(data$dbp13_f<=0|data$dbp13_f%in%c(222,666,888,994,995,996,999,1000,9999))] <- NA
+# clnList <- which(data$dbp13_f>max_dbp | data$dbp13_f<min_dbp)
+# N_dbp <- N_dbp + sum(!is.na(data$dbp13_f))
+# N_dbp_cleaned <- N_dbp_cleaned + length(clnList)
+# dbp_cleaned <- c(dbp_cleaned, data$dbp13_f[clnList])
+# print_cleaned("dbp13_f")
+# data$dbp13_f[clnList] <- NA
+# data$dbp13_f[which(data$unit_bp=="EXCLUDE")] <- NA
+# 
+# data$dbp_avg_f <- data$dbp_avg
+# data$dbp_avg_f[which(data$dbp_avg_f<=0|data$dbp_avg_f%in%c(222,666,888,994,995,996,999,1000,9999))] <- NA
+# clnList <- which(data$dbp_avg_f>max_dbp | data$dbp_avg_f<min_dbp)
+# N_dbp <- N_dbp + sum(!is.na(data$dbp_avg_f))
+# N_dbp_cleaned <- N_dbp_cleaned + length(clnList)
+# dbp_cleaned <- c(dbp_cleaned, data$dbp_avg_f[clnList])
+# print_cleaned("dbp_avg_f")
+# data$dbp_avg_f[clnList] <- NA
+# data$dbp_avg_f[which(data$unit_bp=="EXCLUDE")] <- NA
+# 
+# print("Excluded DBP data outside of the plausible range")
+# print(paste0(signif(N_dbp_cleaned/N_dbp, digit=3)*100,"%"))
+# print(table(round(dbp_cleaned)))
 
 # Mark Dropped
-dropList <- which(is.na(data$sbp1_f) & is.na(data$sbp2_f) & is.na(data$sbp3_f) & is.na(data$sbp4_f) & is.na(data$sbp5_f) &
-                  is.na(data$sbp6_f) & is.na(data$sbp7_f) & is.na(data$sbp8_f) & is.na(data$sbp9_f) & is.na(data$sbp10_f) &
-                  is.na(data$sbp11_f) & is.na(data$sbp12_f) & is.na(data$sbp13_f) & is.na(data$sbp_avg_f) &
-                  is.na(data$dbp1_f) & is.na(data$dbp2_f) & is.na(data$dbp3_f) & is.na(data$dbp4_f) & is.na(data$dbp5_f) &
-                  is.na(data$dbp6_f) & is.na(data$dbp7_f) & is.na(data$dbp8_f) & is.na(data$dbp9_f) & is.na(data$dbp10_f) &
-                  is.na(data$dbp11_f) & is.na(data$dbp12_f) & is.na(data$dbp13_f) & is.na(data$dbp_avg_f) )
-data$dropped[dropList] <- paste(data$dropped[dropList], "NoData")
+# dropList <- which(is.na(data$sbp1_f) & is.na(data$sbp2_f) & is.na(data$sbp3_f) & is.na(data$sbp4_f) & is.na(data$sbp5_f) &
+#                   is.na(data$sbp6_f) & is.na(data$sbp7_f) & is.na(data$sbp8_f) & is.na(data$sbp9_f) & is.na(data$sbp10_f) &
+#                   is.na(data$sbp11_f) & is.na(data$sbp12_f) & is.na(data$sbp13_f) & is.na(data$sbp_avg_f) &
+#                   is.na(data$dbp1_f) & is.na(data$dbp2_f) & is.na(data$dbp3_f) & is.na(data$dbp4_f) & is.na(data$dbp5_f) &
+#                   is.na(data$dbp6_f) & is.na(data$dbp7_f) & is.na(data$dbp8_f) & is.na(data$dbp9_f) & is.na(data$dbp10_f) &
+#                   is.na(data$dbp11_f) & is.na(data$dbp12_f) & is.na(data$dbp13_f) & is.na(data$dbp_avg_f) )
+# data$dropped[dropList] <- paste(data$dropped[dropList], "NoData")
 
 ### g-j. antihypertensive drug use ------------------------------------
 
 # The variable should be either 0 or 1
-data$self_hyper[which(data$self_hyper<0)] <- NA # Get rid of negative values
-clnList <- which(data$self_hyper!=0&data$self_hyper!=1) # flag the datapoints that dont have the variable as either 0 or 1
-print_cleaned("self_hyper") # Print all the studies and percentanges that were dropped that had this variable
-data$self_hyper[clnList] <- NA # Make all the wrong values NA
+# data$self_hyper[which(data$self_hyper<0)] <- NA # Get rid of negative values
+# clnList <- which(data$self_hyper!=0&data$self_hyper!=1) # flag the datapoints that dont have the variable as either 0 or 1
+# print_cleaned("self_hyper") # Print all the studies and percentanges that were dropped that had this variable
+# data$self_hyper[clnList] <- NA # Make all the wrong values NA
 
-data$self_hyper_12mos[which(data$self_hyper_12mos<0)] <- NA
-clnList <- which(data$self_hyper_12mos!=0&data$self_hyper_12mos!=1)
-print_cleaned("self_hyper_12mos")
-data$self_hyper_12mos[clnList] <- NA
+# data$self_hyper_12mos[which(data$self_hyper_12mos<0)] <- NA
+# clnList <- which(data$self_hyper_12mos!=0&data$self_hyper_12mos!=1)
+# print_cleaned("self_hyper_12mos")
+# data$self_hyper_12mos[clnList] <- NA
 
-data$drug_presc[which(data$drug_presc<0)] <- NA
-clnList <- which(data$drug_presc!=0&data$drug_presc!=1)
-print_cleaned("drug_presc")
-data$drug_presc[clnList] <- NA
-
-data$drug_bp[which(data$drug_bp<0)] <- NA
-clnList <- which(data$drug_bp!=0&data$drug_bp!=1)
-print_cleaned("drug_bp")
-data$drug_bp[clnList] <- NA
-
-data$drug_hyper[which(data$drug_hyper<0)] <- NA
-clnList <- which(data$drug_hyper!=0&data$drug_hyper!=1)
-print_cleaned("drug_hyper")
-data$drug_hyper[clnList] <- NA
+# data$drug_presc[which(data$drug_presc<0)] <- NA
+# clnList <- which(data$drug_presc!=0&data$drug_presc!=1)
+# print_cleaned("drug_presc")
+# data$drug_presc[clnList] <- NA
+# 
+# data$drug_bp[which(data$drug_bp<0)] <- NA
+# clnList <- which(data$drug_bp!=0&data$drug_bp!=1)
+# print_cleaned("drug_bp")
+# data$drug_bp[clnList] <- NA
+# 
+# data$drug_hyper[which(data$drug_hyper<0)] <- NA
+# clnList <- which(data$drug_hyper!=0&data$drug_hyper!=1)
+# print_cleaned("drug_hyper")
+# data$drug_hyper[clnList] <- NA
 
 # All of these variables should either be 0 or 1 and this does that 
 
