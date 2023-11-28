@@ -131,8 +131,9 @@ clean_data_index <- function(data, variable) {
                        whtr = clean_wth(data[[variable]], data$age, data$is_pregnant),
                        whr  = clean_whr(data[[variable]], data$age, data$is_pregnant),
                        
-                       is_pregnant = , is_pregnant_exam = ,
-                       is_urban = ,
+                       is_pregnant =  clean_cat(data[[variable]], variable), is_pregnant_exam = 
+                         clean_cat(data[[variable]], variable),
+                       is_urban =  clean_cat(data[[variable]], variable),
                        is_plasma = , is_plasma_ppg =
                          clean_cat(data[[variable]], variable),
                        
@@ -170,11 +171,12 @@ clean_data_index <- function(data, variable) {
 
 clean_height <- function(height, var_name, age) {
   clean_list <- c()
-  remove negatives
+  clean_list <- c(clean_list, which(height <0))
   # Clean height according to age group #
   clean_list <- c(clean_list, which((age >= 5 & age < 10) & (height < 60 | height > 180)))
   clean_list <- c(clean_list, which((age >= 10 & age < 15) & (height < 80 | height > 200)))
   clean_list <- c(clean_list, which((age >= 15) & (height < 100 | height > 250)))
+  clean_list <- c(clean_list, which((is.na(age)) & (height < 100 | height > 250)))
   clean_list <- unique(clean_list)
   print(paste("Number of", var_name, "data recoded as NA:", length(clean_list), "of", sum(!is.na(height))))
   return(clean_list)
@@ -182,10 +184,12 @@ clean_height <- function(height, var_name, age) {
 
 clean_weight <- function(weight, var_name, age, is_pregnant) {
   clean_list <- c()
+  clean_list <- c(clean_list, which(weight <0))
   # Clean weight according to age group #
   clean_list <- c(clean_list, which((age >= 5 & age < 10) & (weight < 5 | weight > 90)))
   clean_list <- c(clean_list, which((age >= 10 & age < 15) & (weight < 8 | weight > 150)))
   clean_list <- c(clean_list, which((age >= 15) & (weight < 12 | weight > 300)))
+  clean_list <- c(clean_list, which((is.na(age)) & (weight < 12 | weight > 300)))
   clean_list <- c(clean_list, which(is_pregnant == 1 & !is.na(weight)))
   clean_list <- unique(clean_list)
   print(paste("Number of", var_name, "data recoded as NA:", length(clean_list), "of", sum(!is.na(weight))))
@@ -194,10 +198,12 @@ clean_weight <- function(weight, var_name, age, is_pregnant) {
 
 clean_bmi <- function(bmi, var_name, age, is_pregnant) {
   clean_list <- c()
+  clean_list <- c(clean_list, which(bmi <0))
   # Clean bmi according to age group #
   clean_list <- c(clean_list, which((age >= 5 & age < 10) & (bmi < 6 | bmi > 40)))
   clean_list <- c(clean_list, which((age >= 10 & age < 15) & (bmi < 8 | bmi > 60)))
   clean_list <- c(clean_list, which((age >= 15) & (bmi < 10 | bmi > 80)))
+  clean_list <- c(clean_list, which((is.na(age)) & (bmi < 10 | bmi > 80)))
   clean_list <- c(clean_list, which(is_pregnant == 1 & !is.na(bmi)))
   clean_list <- unique(clean_list)
   print(paste("Number of", var_name, "data recoded as NA:", length(clean_list), "of", sum(!is.na(bmi))))
@@ -207,9 +213,11 @@ clean_bmi <- function(bmi, var_name, age, is_pregnant) {
 clean_waist <- function(waist, var_name, age, is_pregnant) {
   clean_list <- c()
   # Clean waist according to age group #
+  clean_list <- c(clean_list, which(waist <0))
   clean_list <- c(clean_list, which((age >= 5 & age < 10) & (waist < 20 | waist > 150)))
   clean_list <- c(clean_list, which((age >= 10 & age < 15) & (waist < 20 | waist > 200)))
   clean_list <- c(clean_list, which((age >= 15) & (waist < 30 | waist > 300)))
+  clean_list <- c(clean_list, which((is.na(age)) & (waist < 30 | waist > 300)))
   clean_list <- c(clean_list, which(is_pregnant == 1 & !is.na(waist)))
   clean_list <- unique(clean_list)
   print(paste("Number of", var_name, "data recoded as NA:", length(clean_list), "of", sum(!is.na(waist))))
@@ -218,9 +226,11 @@ clean_waist <- function(waist, var_name, age, is_pregnant) {
 
 clean_wth <- function(wth, age, is_pregnant) {
   clean_list <- c()
+  clean_list <- c(clean_list, which(wth <0))
   # Clean wth according to age group #
   clean_list <- c(clean_list, which((age >= 5 & age < 15) & (wth < 0.2 | wth > 1.5)))
   clean_list <- c(clean_list, which((age >= 15) & (wth < 0.2 | wth > 2.0)))
+  clean_list <- c(clean_list, which((is.na(age)) & (wth < 0.2 | wth > 2.0)))
   clean_list <- c(clean_list, which(is_pregnant == 1 & !is.na(wth)))
   clean_list <- unique(clean_list)
   print(paste("Number of waist-to-height ratio data recoded as NA:", length(clean_list), "of", sum(!is.na(wth))))
@@ -230,10 +240,12 @@ clean_wth <- function(wth, age, is_pregnant) {
 
 clean_hip <- function(hip, var_name, age, is_pregnant) {
   clean_list <- c()
+  clean_list <- c(clean_list, which(hip <0))
   # Clean hip according to age group #
   clean_list <- c(clean_list, which((age >= 5 & age < 10) & (hip < 30 | hip > 180)))
   clean_list <- c(clean_list, which((age >= 10 & age < 15) & (hip < 30 | hip > 200)))
   clean_list <- c(clean_list, which((age >= 15) & (hip < 40 | hip > 300)))
+  clean_list <- c(clean_list, which((is.na(age)) & (hip < 40 | hip > 300)))
   clean_list <- c(clean_list, which(is_pregnant == 1 & !is.na(hip)))
   clean_list <- unique(clean_list)
   print(paste("Number of", var_name, "data recoded as NA:", length(clean_list), "of", sum(!is.na(hip))))
@@ -243,9 +255,11 @@ clean_hip <- function(hip, var_name, age, is_pregnant) {
 
 clean_whr <- function(whr, age, is_pregnant) {
   clean_list <- c()
+  clean_list <- c(clean_list, which(whr <0))
   # Clean whr according to age group #
   clean_list <- c(clean_list, which((age >= 5 & age < 15) & (whr < 0.4 | whr > 1.8)))
   clean_list <- c(clean_list, which((age >= 15) & (whr < 0.4 | whr > 2.0)))
+  clean_list <- c(clean_list, which(is.na(age) & (whr < 0.4 | whr > 2.0)))
   clean_list <- c(clean_list, which(is_pregnant == 1 & !is.na(whr)))
   clean_list <- unique(clean_list)
   print(paste("Number of wait-to-hip ratio data recoded as NA:", length(clean_list), "of", sum(!is.na(whr))))
@@ -264,23 +278,18 @@ clean_age <- function(age) {
   return(clean_list)
 }
 
-clean_continuous <- function(var, var_name, minv, maxv) {
+clean_continuous <- function(var, var_name, minv, maxv) { #if I get print out to work use this in bp loop
   clean_list <- which(var < minv | var > maxv)
   print(paste("Number of", var_name, "data recoded as NA:", length(clean_list), "of", sum(!is.na(var))))
   return(clean_list)
 }
 
 clean_cat <- function(var, var_name) {
-  clean_list <- which(var != 0 & var != 1)
+  clean_list <- which(var != 0 & var != 1 | var < 0)
   print(paste("Number of", var_name, "data recoded as NA:", length(clean_list), "of", sum(!is.na(var))))
   return(clean_list)
 }
 
-clean_urban <- function(is_urban) {
-  clean_list <- c(clean_list, which(data$is_urban!=0&data$is_urban!=1 | data$is_urban <0))
-  print(paste("Number of is_urban data recoded as NA:", length(clean_list), "of", sum(!is.na(is_urban))))
-  return(clean_list)
-}
 
 print_cleaned <- function(var) {
   print(paste("Percentage Cleaned (No. of cleaned/No. of non-NAs):",var,"(%)"))
@@ -336,4 +345,10 @@ add_dbp_f <- function(){
   return(data)
 }  
 
- 
+calc_avg <- function(x){
+  avg <- x[1]; x1 <- x[2]; x2 <- x[-c(1,2)]
+  res <- mean(x2, na.rm=TRUE)
+  if (is.na(res)) res <- x1
+  if (is.na(res)) res <- avg
+  return (res)
+}
