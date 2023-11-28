@@ -108,7 +108,7 @@ dropList <- which(is.na(data$sbp1_f) & is.na(data$sbp2_f) & is.na(data$sbp3_f) &
                     is.na(data$dbp11_f) & is.na(data$dbp12_f) & is.na(data$dbp13_f) & is.na(data$dbp_avg_f) )
 data$dropped[dropList] <- paste(data$dropped[dropList], "NoData")
 
-calc_avg <- function(x){
+calc_avg <- function(x){ # chagne to summarise one
   avg <- x[1]; x <- x[-1]
   pos <- which(!is.na(x))
   if (length(pos)==0) res <- avg else
@@ -146,7 +146,7 @@ data$is_urban <- clean_data(data,'is_urban')
 data$is_pregnant[which(data$is_pregnant<0)] <- NA
 clnList <- which(data$is_pregnant!=0&data$is_pregnant!=1)
 print_cleaned("is_pregnant")
-data$is_pregnant[clnList] <- NA
+data$is_pregnant[clnList] <- NA #change to function
 
 clnList <- which(data$is_pregnant==1&(data$sex=="male"|data$age>=50|data$age<10))
 print_cleaned("is_pregnant")
@@ -157,7 +157,7 @@ data$is_pregnant[which(data$sex=="male")] <- 0
 data$is_pregnant_exam[which(data$is_pregnant_exam<0)] <- NA
 clnList <- which(data$is_pregnant_exam!=0&data$is_pregnant_exam!=1)
 print_cleaned("is_pregnant_exam")
-data$is_pregnant_exam[clnList] <- NA
+data$is_pregnant_exam[clnList] <- NA #change to function
 
 clnList <- which(data$is_pregnant_exam==1&(data$sex=="male"|data$age>=50|data$age<10))
 print_cleaned("is_pregnant_exam")
@@ -184,6 +184,7 @@ data$weight2[data$weight2<0] <- NA
 data$weight3[data$weight3<0] <- NA
 list <- which(is.na(data$weight)&(!is.na(data$weight1)|!is.na(data$weight2)|!is.na(data$weight3)))
 data$weight[list] <-  apply(data[list, c("weight1","weight2","weight3")], 1, mean, na.rm=TRUE)
+
 
 data$bmi <- with(data, ifelse(is.na(height)|is.na(weight),bmi,weight/height/height*10000) ) # calculate BMI from height and weight if not given
 
@@ -224,6 +225,13 @@ if (length(check_idx) > 0) {
 data$bmi_clean <- ifelse(is.na(data$bmi_clean), data$weight_clean/((data$height_clean/100)^2), data$bmi)
 data$whr_clean <- ifelse(is.na(data$whr), data$waist_clean/data$hip_clean, data$whr)
 
+my_data %>% 
+  rename(
+    bmi = bmi_clean,
+    height = height_clean,
+    weight = weight_clean,
+    whr = whr_clean
+  )
 
 data <- subset(data, select = c(
   "id_study", "iso", "country", "start_year",
@@ -266,7 +274,7 @@ data <- subset(data, select = c(
   "dbp5_f", "dbp6_f", "dbp7_f", "dbp8_f",
   "dbp9_f", "dbp10_f", "dbp11_f", "dbp12_f",
   "dbp13_f", "dbp_avg_f", "sbp_final", "dbp_final",
-  "bmi_clean", "height_clean", "weight_clean"
+  "bmi", "height", "weight"
 ))
 
 sink()

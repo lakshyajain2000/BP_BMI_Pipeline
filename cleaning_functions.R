@@ -170,6 +170,7 @@ clean_data_index <- function(data, variable) {
 
 clean_height <- function(height, var_name, age) {
   clean_list <- c()
+  remove negatives
   # Clean height according to age group #
   clean_list <- c(clean_list, which((age >= 5 & age < 10) & (height < 60 | height > 180)))
   clean_list <- c(clean_list, which((age >= 10 & age < 15) & (height < 80 | height > 200)))
