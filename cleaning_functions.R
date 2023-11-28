@@ -27,7 +27,7 @@ clean_data <- function(data, variable) {
   )
   if (!is.na(unit_var)) {
     if (!unit_var %in% names(data)) stop(paste(unit_var, 'is not available in the data frame'))
-
+    
     # conversion functions
     funcNA <- function(x) NA
     func0 <- function(x) x * 2.54     # inch
@@ -36,7 +36,7 @@ clean_data <- function(data, variable) {
     func2 <- function(x) x * 0.0915 + 2.15  # HbA1c
     func3 <- function(x) x * 0.0259   # cholesterol
     func4 <- function(x) x * 0.0113   # triglycerides
-
+    
     conversion_func <- switch(
       unit_var,
       unit_height = , unit_waist = , unit_hip =
@@ -53,12 +53,12 @@ clean_data <- function(data, variable) {
         list('mg/dL' = func4, 'mg/dl' = func4, 'mg%' = func4, 'mmol/L' = identity, 'mmol/l' = identity, 'EXCLUDE' = funcNA),
       list()
     )
-
+    
     if (length(conversion_func) > 0) {
       unique_units <- setdiff(unique(data[[unit_var]]), c(NA))
       tmp <- setdiff(unique_units, names(conversion_func))
       if (length(tmp)>0) stop(paste(unit_var, 'has unknown unit(s):', paste(tmp, collapse = ', ') ))
-
+      
       for (u in unique_units) {
         func <- conversion_func[[u]]
         if (!identical(func, identity)) {
@@ -67,13 +67,13 @@ clean_data <- function(data, variable) {
             n_study <- length(unique(data$id_study[list]))
             data[[variable]][list] <- func(data[[variable]][list])
             switch(u,
-              EXCLUDE =
-                print(paste("Number of", variable, "data excluded:", length(list), "rows in", n_study, "studies")),
-              print(paste("Number of", variable, "data in", u, "converted:", length(list), "rows in", n_study, "studies"))
+                   EXCLUDE =
+                     print(paste("Number of", variable, "data excluded:", length(list), "rows in", n_study, "studies")),
+                   print(paste("Number of", variable, "data in", u, "converted:", length(list), "rows in", n_study, "studies"))
             )
           }}}
     }
-
+    
     # conversion for is_plasma for glucose
     if (unit_var == 'unit_gl') {
       list <- which(data$is_plasma==0)
@@ -92,10 +92,10 @@ clean_data <- function(data, variable) {
       }
     }
   }
-
+  
   # clean data
   index <- clean_data_index(data, variable)
-
+  
   v <- data[[variable]]
   v[index] <- NA
   return(v)
@@ -116,53 +116,53 @@ clean_data_index <- function(data, variable) {
   clean_list <- switch(variable,
                        sex    = clean_sex(data$sex),
                        age    = clean_age(data$age),
-
+                       
                        height1 = , height2 = , height3 = , height =
                          clean_height(data[[variable]], variable, data$age),
                        weight1 = , weight2 = , weight3 = , weight =
                          clean_weight(data[[variable]], variable, data$age, data$is_pregnant),
                        bmi = clean_bmi(data[[variable]], variable, data$age, data$is_pregnant),
-
+                       
                        waist1 = , waist2 = , waist3 = , waist =
                          clean_waist(data[[variable]], variable, data$age, data$is_pregnant),
                        hip1 = , hip2 = , hip3 = , hip =
                          clean_hip(data[[variable]], variable, data$age, data$is_pregnant),
-
+                       
                        whtr = clean_wth(data[[variable]], data$age, data$is_pregnant),
                        whr  = clean_whr(data[[variable]], data$age, data$is_pregnant),
-
+                       
                        is_pregnant = , is_pregnant_exam = ,
                        is_urban = ,
                        is_plasma = , is_plasma_ppg =
                          clean_cat(data[[variable]], variable),
-
+                       
                        drug_diab = , drug_diab_insu = , drug_diab_pill = , self_diab =
                          clean_cat(data[[variable]], variable),
-
+                       
                        fgl    = clean_continuous(data[[variable]], variable, 2, 30),
                        ppg    = clean_continuous(data[[variable]], variable, 2, 30),
                        hba1c  = clean_continuous(data[[variable]], variable, 3, 18),
-
+                       
                        drug_hyper = , drug_presc = , drug_bp = ,
                        self_hyper_12mos = , self_hyper_preg = , self_hyper =
                          clean_cat(data[[variable]], variable),
-
+                       
                        sbp1 = , sbp2 = , sbp3 = , sbp4 = , sbp5 = , sbp6 = , sbp7 = , sbp8 = ,
                        sbp9 = , sbp10 = , sbp11 = , sbp12 = , sbp13 = , sbp_avg =
                          clean_continuous(data[[variable]], variable, 70, 270),
-
+                       
                        dbp1 = , dbp2 = , dbp3 = , dbp4 = , dbp5 = , dbp6 = , dbp7 = , dbp8 = ,
                        dbp9 = , dbp10 = , dbp11 = , dbp12 = , dbp13 = , dbp_avg =
                          clean_continuous(data[[variable]], variable, 30, 150),
-
+                       
                        drug_chol = , drug_chol_stat = , drug_chol_fibr = , self_chol =
                          clean_cat(data[[variable]], variable),
-
+                       
                        tc  = clean_continuous(data[[variable]], variable, 1.75, 20),
                        ldl = clean_continuous(data[[variable]], variable,  0.5, 10),
                        hdl = clean_continuous(data[[variable]], variable,  0.4,  5),
                        trg = clean_continuous(data[[variable]], variable,  0.2, 20),
-
+                       
                        {print(paste('Warning: Variable', variable, 'is not expected')); c()}
   )
   return(clean_list)
@@ -261,7 +261,6 @@ clean_age <- function(age) {
   clean_list <- which(age < 0 | age > 120)
   print(paste("Number of age data recoded as NA:", length(clean_list), "of", sum(!is.na(age))))
   return(clean_list)
-  data$age[clean_list] <- NA
 }
 
 clean_continuous <- function(var, var_name, minv, maxv) {
@@ -276,6 +275,11 @@ clean_cat <- function(var, var_name) {
   return(clean_list)
 }
 
+clean_urban <- function(is_urban) {
+  clean_list <- c(clean_list, which(data$is_urban!=0&data$is_urban!=1 | data$is_urban <0))
+  print(paste("Number of is_urban data recoded as NA:", length(clean_list), "of", sum(!is.na(is_urban))))
+  return(clean_list)
+}
 
 print_cleaned <- function(var) {
   print(paste("Percentage Cleaned (No. of cleaned/No. of non-NAs):",var,"(%)"))

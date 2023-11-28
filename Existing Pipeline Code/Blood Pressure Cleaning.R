@@ -627,4 +627,4 @@ data$weight_clean<-ifelse(data$weight_clean<10 | data$weight_clean>300, NA, data
 data$height1 <- data$height2 <- data$height3 <- data$weight1 <- data$weight2 <- data$weight3 <- NULL 
 
 sink()
-saveRDS(data,file=paste0(wd,"BP_individual_data_cleaned_wBMI.RDS"))
+saveRDS(data,file=paste0(wd,"BP_Anthro_Indiv_Cleaned.RDS"))

@@ -13,7 +13,7 @@ wd <- "~/Documents/Pipeline/BP_BMI_Pipeline"  # Set working directory to folder 
 indir <- "/Volumes/HeightProject/Original dataset/Data/Surveys/Extracted survey/Merged/" # Call the folder with the merged dataset in 
 dhs   <- readRDS("/Volumes/HeightProject/Original dataset/Data/Surveys/DHS/DHS-formatted_latest.RDS")  # DHS dataframe
 steps <- readRDS("/Volumes/HeightProject/Original dataset/Data/Surveys/STEPS/STEPSdata_GLU_BP_chol_formatted_latest.RDS")  # STEPS dataframe
-data  <- readRDS("/Volumes/HeightProject/Original dataset/Data/Surveys/Extracted survey/Merged/testing subsets/10percent_subset_BP_individual_wBMI_data_20231019.RDS")
+data  <- readRDS("/Volumes/HeightProject/Original dataset/Data/Surveys/Extracted survey/Merged/testing subsets/1percent_subset_individual_extracted_20231019.RDS")
 
 
 data_list <- readRDS(paste(indir,"survey_data_availability.RDS",sep="")) #List of metadata for each survey and what variables are available
