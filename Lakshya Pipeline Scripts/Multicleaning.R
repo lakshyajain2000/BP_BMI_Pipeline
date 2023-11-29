@@ -23,27 +23,27 @@ pdf("Mahalanobis_plots.pdf",   # The directory you want to save the file in
 bp_clean <- maha_clean(data$sbp_final, data$dbp_final)
 bp_clean$scatter
 length(bp_clean$outliers)
-if (length(bp_clean$outliers)>0) data_clean <- data[-bp_clean$outliers, ]
+#if (length(bp_clean$outliers)>0) data_clean <- data[-bp_clean$outliers, ]
 
 # Clean Height and weight together
 
 hw_clean <- maha_clean(data$height, data$weight)
 hw_clean$scatter
 length(hw_clean$outliers)
-if (length(hw_clean$outliers)>0) data_clean1 <- data[-hw_clean$outliers, ]
+#if (length(hw_clean$outliers)>0) data_clean1 <- data[-hw_clean$outliers, ]
 
 # Clean Height and BMI together
 
-height_to_drop <- c()
-weight
-bmi
-waist circum
-whr waist-to-hip-ratio
+#height_to_drop <- c()
+#weight
+#bmi
+#waist circum
+#whr waist-to-hip-ratio
 
 hBMI_clean <- maha_clean(data$height, data$bmi)
 hBMI_clean$scatter
 length(hBMI_clean$outliers)
-if (length(hBMI_clean$outliers)>0) data_clean2 <- data[-hBMI_clean$outliers, ]
+#if (length(hBMI_clean$outliers)>0) data_clean2 <- data[-hBMI_clean$outliers, ]
 # add to height/weight/bmi lists
 
 
@@ -52,7 +52,7 @@ if (length(hBMI_clean$outliers)>0) data_clean2 <- data[-hBMI_clean$outliers, ]
 wBMI_clean <- maha_clean(data$weight, data$bmi)
 wBMI_clean$scatter
 length(wBMI_clean$outliers)
-if (length(wBMI_clean$outliers)>0) data_clean3 <- data[-wBMI_clean$outliers, ]
+#if (length(wBMI_clean$outliers)>0) data_clean3 <- data[-wBMI_clean$outliers, ]
 # add to height/weight/bmi lists
 
 # Clean Height and WC together
@@ -60,7 +60,7 @@ if (length(wBMI_clean$outliers)>0) data_clean3 <- data[-wBMI_clean$outliers, ]
 hWC_clean <- maha_clean(data$waist, data$height)
 hWC_clean$scatter
 print(length(hWC_clean$outliers))
-if (length(hWC_clean$outliers)>0) data_clean4 <- data[-hWC_clean$outliers, ]
+#if (length(hWC_clean$outliers)>0) data_clean4 <- data[-hWC_clean$outliers, ]
 # add to height/bmi/wc/whtr lists
 
 # Clean Weight and WC together
@@ -68,15 +68,15 @@ if (length(hWC_clean$outliers)>0) data_clean4 <- data[-hWC_clean$outliers, ]
 wWC_clean <- maha_clean(data$waist, data$weight)
 wWC_clean$scatter
 print(length(wWC_clean$outliers))
-if (length(wWC_clean$outliers)>0) data_clean5 <- data[-wWC_clean$outliers, ]
+#if (length(wWC_clean$outliers)>0) data_clean5 <- data[-wWC_clean$outliers, ]
 # add to weight/bmi/wc/whtr lists
 
-# Clean Height and WHtR together
+# Clean Height and WHtR together takes long
 
 hWtHR_clean <- maha_clean(data$wth, data$height)
 hWtHR_clean$scatter
 print(length(hWtHR_clean$outliers))
-if (length(hWtHR_clean$outliers)>0) data_clean6 <- data[-hWtHR_clean$outliers, ]
+#if (length(hWtHR_clean$outliers)>0) data_clean6 <- data[-hWtHR_clean$outliers, ]
 # add to height/bmi/wc/whtr lists
 
 # Clean Weight and WtHR together
@@ -84,7 +84,7 @@ if (length(hWtHR_clean$outliers)>0) data_clean6 <- data[-hWtHR_clean$outliers, ]
 wWtHR_clean <- maha_clean(data$wth, data$height)
 wWtHR_clean$scatter
 print(length(wWtHR_clean$outliers))
-if (length(wWtHR_clean$outliers)>0) data_clean7 <- data[-wWtHR_clean$outliers, ]
+#if (length(wWtHR_clean$outliers)>0) data_clean7 <- data[-wWtHR_clean$outliers, ]
 # add to weight/bmi/wc/whtr lists
 
 # Clean WC and BMI together
@@ -92,7 +92,7 @@ if (length(wWtHR_clean$outliers)>0) data_clean7 <- data[-wWtHR_clean$outliers, ]
 WCBMI_clean <- maha_clean(data$waist, data$bmi)
 WCBMI_clean$scatter
 print(length(WCBMI_clean$outliers))
-if (length(WCBMI_clean$outliers)>0) data_clean8 <- data[-WCBMI_clean$outliers, ]
+#if (length(WCBMI_clean$outliers)>0) data_clean8 <- data[-WCBMI_clean$outliers, ]
 # add to weight/bmi/wc/whtr/height lists
 
 # Clean WC and WtHR together
@@ -100,7 +100,7 @@ if (length(WCBMI_clean$outliers)>0) data_clean8 <- data[-WCBMI_clean$outliers, ]
 WCWtHR_clean <- maha_clean(data$waist, data$wth)
 WCWtHR_clean$scatter
 print(length(WCWtHR_clean$outliers))
-if (length(WCWtHR_clean$outliers)>0) data_clean9 <- data[-WCWtHR_clean$outliers, ]
+#if (length(WCWtHR_clean$outliers)>0) data_clean9 <- data[-WCWtHR_clean$outliers, ]
 # add to wc/whtr lists
 
 # Clean WtHR and BMI together
@@ -108,13 +108,13 @@ if (length(WCWtHR_clean$outliers)>0) data_clean9 <- data[-WCWtHR_clean$outliers,
 BMIWtHR_clean <- maha_clean(data$bmi, data$wth)
 BMIWtHR_clean$scatter
 print(length(BMIWtHR_clean$outliers))
-if (length(BMIWtHR_clean$outliers)>0) data_clean10 <- data[-BMIWtHR_clean$outliers, ]
+#if (length(BMIWtHR_clean$outliers)>0) data_clean10 <- data[-BMIWtHR_clean$outliers, ]
 # add to weight/bmi/wc/whtr/height lists
 
 
-data<-rbind(data_clean,data_clean1,data_clean2,data_clean3, data_clean4, data_clean5, data_clean6,
-            data_clean7, data_clean8, data_clean9, clean_data10)
+#data<-rbind(data_clean,data_clean1,data_clean2,data_clean3, data_clean4, data_clean5, data_clean6,
+         #   data_clean7, data_clean8, data_clean9, clean_data10)
 
-data %>% distinct()
+#data %>% distinct()
 
 dev.off()
