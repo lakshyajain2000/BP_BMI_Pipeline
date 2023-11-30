@@ -1,16 +1,16 @@
 # NCD-RisC
-# Mahalanobis outlier detection
+# Mahalanobis outlier detection 
 # July 2021
 
 library(rrcov)
 library(ggplot2)
 
-maha_clean <- function(var1, var2, level = NA, SD = 6, plot_data = TRUE){
+maha_clean <- function(var1, var2, level = NA, SD = 8, plot_data = TRUE){
   # default level is equivalent to being 6 sd away from the mean for normal distribution
   if (is.na(level)) level <- (1-pnorm(SD))*2
   
   data <- as.data.frame(cbind(var1, var2))
-  b    <- covMcd(data, alpha=0.95)    # robust estimate of the covariance
+  b    <- covMcd(data, alpha=0.95)    # robust estimate of the covariance   
   
   data$m_dist <- mahalanobis(data, b$center,b$cov)
   
@@ -21,7 +21,7 @@ maha_clean <- function(var1, var2, level = NA, SD = 6, plot_data = TRUE){
   
   if (plot_data & length(cleaned_rows)>0) {
     d2 <- data[cleaned_rows,]
-    p <- ggplot(data,aes(x=var1,y=var2)) +
+    p <- ggplot(data,aes(x=var1,y=var2)) + 
       geom_bin2d(bins = 130) +
       scale_fill_continuous(type = "viridis") +
       theme_bw()+

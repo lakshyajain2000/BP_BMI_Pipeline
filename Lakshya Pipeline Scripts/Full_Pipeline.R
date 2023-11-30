@@ -8,4 +8,4 @@ source("~/Documents/Pipeline/BP_BMI_Pipeline/Lakshya Pipeline Scripts/Multiclean
 
 # At this point there will be a cleaned dataset ready to summarise
 
-qqplot(data$sbp_final, data$dbp_final)
+

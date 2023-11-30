@@ -1,11 +1,7 @@
-source("~/Documents/Pipeline/BP_BMI_Pipeline/cleaning_functions.R")
+source("~/Documents/Pipeline/BP_BMI_Pipeline/Functions/cleaning_functions.R")
 
 #set up log file
 sink(paste0(wd,"log_BPCleaning_",date, ".txt"))
-
-pdf("Univariate_cleaning.pdf",   # The directory you want to save the file in
-    width = 4, # The width of the plot in inches
-    height = 4)
 
 # Clean all demographic variables--------------------------------
 
@@ -21,20 +17,17 @@ age.na <- table(data[clean_list,]$id_study)/table(data$id_study)*100
 print("Percentage of NAs in Age (%)")
 print(sort(round(age.na[which(age.na>0)],2), decreasing=TRUE))
 
-hist(data$age)
-
 #sex
 data$sex<-clean_data(data,'sex')
 data$sex <- as.factor(data$sex)
 levels(data$sex) <- c("male","female")
-#clnList <- which(is.na(data$sex))
-#sex.na <- table(data[clnList,]$id_study)/table(data$id_study)*100
-#print("Percentage of NAs in Sex (%)")
-#print(sort(round(sex.na[which(sex.na>0)],2), decreasing=TRUE))
+clnList <- which(is.na(data$sex))
+sex.na <- table(data[clnList,]$id_study)/table(data$id_study)*100
+print("Percentage of NAs in Sex (%)")
+print(sort(round(sex.na[which(sex.na>0)],2), decreasing=TRUE))
 
 dropList <- which(is.na(data$sex)|(is.na(data$age) & is.na(data$age_mean) & is.na(data$age_group)))
 data$dropped[dropList] <- paste(data$dropped[dropList],"AgeSex")
-
 
 #age range
 
@@ -94,26 +87,18 @@ dbp_error <- c(222,666,888,994,995,996,999,1000,9999) # common error codes - cha
 
 data<-add_dbp_f()
 
-dbp_f <- c("dbp1", "dbp2","dbp3", "dbp4", "dbp5", "dbp6", "dbp7", "dbp8", "dbp9", "dbp10", "dbp11", "dbp12", "dbp13", "dbp_avg")
-
-#for (dbp_f_i in dbp_f){
-#  data[[dbp_f_i]][which(data[[dbp_f_i]]<=0|data[[dbp_f_i]]%in%dbp_error)] <- NA # removing all negative values and common missing value entries
-#  clean_list <- which(data[[dbp_f_i]]>max_dbp | data[[dbp_f_i]]<min_dbp) # flagging all entries whose values that are outside the plausible range
-#  N_dbp <- N_dbp + sum(!is.na(data[[dbp_f_i]])) # number of people left are those who don't have NA for this variable - ie they didnt have NA before and their entry hasnt become NA for being implausible
-#  N_dbp_cleaned <- N_dbp_cleaned + length(clean_list) # number of people that have become NA because their values were outside the plausible range
-#  dbp_cleaned <- c(dbp_cleaned, data[[dbp_f_i]][clean_list])
-#  print_cleaned(dbp_f_i)
-#  data[[dbp_f_i]][clean_list] <- NA # Make all the implausible values NA
-#  data[[dbp_f_i]][which(data$unit_bp=="EXCLUDE")] <- NA
-#}
+dbp_f <- c("dbp1_f", "dbp2_f","dbp3_f", "dbp4_f", "dbp5_f", "dbp6_f", "dbp7_f", "dbp8_f", "dbp9_f", "dbp10_f", "dbp11_f", "dbp12_f", "dbp13_f", "dbp_avg_f")
 
 for (dbp_f_i in dbp_f){
-  clean_data(data,dbp_f_i)
+  data[[dbp_f_i]][which(data[[dbp_f_i]]<=0|data[[dbp_f_i]]%in%dbp_error)] <- NA # removing all negative values and common missing value entries
+  clean_list <- which(data[[dbp_f_i]]>max_dbp | data[[dbp_f_i]]<min_dbp) # flagging all entries whose values that are outside the plausible range
+  N_dbp <- N_dbp + sum(!is.na(data[[dbp_f_i]])) # number of people left are those who don't have NA for this variable - ie they didnt have NA before and their entry hasnt become NA for being implausible
+  N_dbp_cleaned <- N_dbp_cleaned + length(clean_list) # number of people that have become NA because their values were outside the plausible range
+  dbp_cleaned <- c(dbp_cleaned, data[[dbp_f_i]][clean_list])
   print_cleaned(dbp_f_i)
+  data[[dbp_f_i]][clean_list] <- NA # Make all the implausible values NA
+  data[[dbp_f_i]][which(data$unit_bp=="EXCLUDE")] <- NA
 }
-
-clean_data(data,'sbp2')
-print_cleaned('sbp1')
 
 print("Excluded DBP data outside of the plausible range")
 print(paste0(signif(N_dbp_cleaned/N_dbp, digit=3)*100, "%")) # Calculating the percentage of data points dropped because they were outside of the range 
@@ -133,13 +118,9 @@ data$sbp_final <- apply(data[,c("sbp_avg_f","sbp1_f","sbp2_f","sbp3_f","sbp4_f",
 data$dbp_final <- apply(data[,c("dbp_avg_f","dbp1_f","dbp2_f","dbp3_f","dbp4_f","dbp5_f","dbp6_f","dbp7_f","dbp8_f","dbp9_f","dbp10_f","dbp11_f","dbp12_f","dbp13_f")],1,calc_avg)
 # calculate the average value of BP that will be used in analysis
 
-hist(data$sbp_final)
-hist(data$dbp_final)
-
 # Clean hyper variables
 
 data$self_hyper<-clean_data(data,'self_hyper')
-print_cleaned('self_hyper')
 data$self_hyper_12mos<-clean_data(data,'self_hyper_12mos')
 data$drug_presc<-clean_data(data,'drug_presc')
 data$drug_bp<-clean_data(data,'drug_bp')
@@ -163,7 +144,7 @@ summary(data$is_urban)
 data$is_pregnant <- clean_data(data,'is_pregnant')
 
 clnList <- which(data$is_pregnant==1&(data$sex=="male"|data$age>=50|data$age<10))
-print_cleaned('is_pregnant')
+print_cleaned("is_pregnant")
 data$is_pregnant[clnList] <- 0
 print("Cleaned pregnant males and pregnant females aged over 50 or under 10")
 data$is_pregnant[which(data$sex=="male")] <- 0
@@ -186,29 +167,23 @@ table(data$sex, data$is_pregnant) # pregnant sanity check
 
 data$height<- clean_data(data, 'height')
 summary(data$height)  # Including these for sanity checks
-hist(data$height)
 
 data$weight <- clean_data(data, 'weight')
 summary(data$weight) 
-hist(data$weight)
 
 data$bmi <- ifelse(is.na(data$bmi), data$weight/((data$height/100)^2), data$bmi) # add bmi by calculation
 data$bmi <- clean_data(data, 'bmi')
 summary(data$bmi)
-hist(data$bmi)
 
 data$hip <-clean_data(data,'hip')
 summary(data$hip)
-hist(data$hip)
 
 data$waist <- clean_data(data, 'waist')
 summary(data$waist)
-hist(data$waist)
 
 data$whr <- ifelse(is.na(data$whr), data$waist/data$hip, data$whr)
 data$whr <- clean_data(data, 'whr')
 summary(data$whr)
-hist(data$whr)
 
 
 
@@ -222,7 +197,7 @@ data <- subset(data, select = c(
   "age_max_bp_M", "age_min_bp_F", "age_max_bp_F", "is_plasma",
   "device_bp", "is_multi_cuff", "is_multi_bp",
   "drug_hyper_definition", "hip", "unit_hip", "is_pregnant",
-   "self_hyper", "drug_hyper", "birth_y", "birth_m", "stratum",
+  "self_hyper", "drug_hyper", "birth_y", "birth_m", "stratum",
   "samplewt_anthro", "samplewt_wh",
   "samplewt_smoke", "is_fasting",
   "smoker",
@@ -239,10 +214,9 @@ data <- subset(data, select = c(
   "drug_hyper_class", "meas_bp", "is_urban_all", "unit_bp",
   "self_hyper_new12mos", "meas_bp_12mos", "freq",
   "drug_presc", "is_pregnant_exam", "excluded", "dropped", 
-   "sbp_final", "dbp_final",
+  "sbp_final", "dbp_final",
   "bmi", "height", "weight"
 ))
 
 sink()
-dev.off()
 saveRDS(data,file=paste0(wd,"BP_Anthro_Indiv_Cleaned.RDS"))
