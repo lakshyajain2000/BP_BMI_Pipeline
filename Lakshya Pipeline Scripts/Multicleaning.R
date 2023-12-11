@@ -4,6 +4,7 @@ data <- readRDS("~/Documents/Pipeline/BP_BMI_PipelineBP_Anthro_Indiv_Cleaned.RDS
 
 # Functionalise this
 # Needs lists of rows to get rid of
+# Needs to actually do the cleaning; so far just flagging the points
 
 pdf("Multi_plots_update.pdf",   # The directory you want to save the file in
     width = 12, # The width of the plot in inches
@@ -382,3 +383,44 @@ ggplot(BMIWHR_clean8$scatter$data,aes(x=exp(var1),y=exp(var2))) +
   geom_point(data=d2, aes(x=exp(var1), y=exp(var2), color=SD), shape=21, size = 3)
 
 dev.off()
+
+
+
+
+# Looking at the issues in the full dataset
+
+data  <- readRDS("/Volumes/HeightProject/Original dataset/Mulitple_risk_factors/Anthro_BPBP_Anthro_Indiv_Cleaned.RDS")
+#steps <- readRDS("/Volumes/HeightProject/Original dataset/Data/Surveys/STEPS/STEPSdata_GLU_BP_chol_formatted_latest.RDS")  # STEPS dataframe
+
+# Line in height-waist
+
+library(tidyverse)
+
+data_equal<- data %>% filter(height==waist)
+
+steps_study<-unique(steps$id_study)
+
+pdf("equal waist-height no ylim.pdf",   # The directory you want to save the file in
+    width = 8, # The width of the plot in inches
+    height = 5)
+
+data_id<-as.character(unique(data_equal$id_study))
+plot_list<- list()
+for (i in 1:183){
+  study_i <- data %>% filter(id_study==data_id[i])
+  diff<-as.data.frame(study_i$height-study_i$waist)
+  if(nrow(diff))
+  p<-ggplot(diff, aes(x=study_i$height-study_i$waist))+
+    geom_histogram(bins=50)+
+   
+    ggtitle(data_id[i])+
+    xlab("Height-Waist")
+  
+  print(p)
+  plot_list[[i]]<-p
+}
+
+dev.off()
+
+?pdf    
+

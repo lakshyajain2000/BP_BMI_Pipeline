@@ -102,7 +102,9 @@ for (dbp_f_i in dbp_f){
 
 print("Excluded DBP data outside of the plausible range")
 print(paste0(signif(N_dbp_cleaned/N_dbp, digit=3)*100, "%")) # Calculating the percentage of data points dropped because they were outside of the range 
-print(table(round(dbp_cleaned))) 
+print(table(round(dbp_cleaned)))
+
+
 
 # Mark dropped
 
@@ -113,6 +115,8 @@ dropList <- which(is.na(data$sbp1_f) & is.na(data$sbp2_f) & is.na(data$sbp3_f) &
                     is.na(data$dbp6_f) & is.na(data$dbp7_f) & is.na(data$dbp8_f) & is.na(data$dbp9_f) & is.na(data$dbp10_f) &
                     is.na(data$dbp11_f) & is.na(data$dbp12_f) & is.na(data$dbp13_f) & is.na(data$dbp_avg_f) )
 data$dropped[dropList] <- paste(data$dropped[dropList], "NoData")
+
+
 
 data$sbp_final <- apply(data[,c("sbp_avg_f","sbp1_f","sbp2_f","sbp3_f","sbp4_f","sbp5_f","sbp6_f","sbp7_f","sbp8_f","sbp9_f","sbp10_f","sbp11_f","sbp12_f","sbp13_f")],1,calc_avg)
 data$dbp_final <- apply(data[,c("dbp_avg_f","dbp1_f","dbp2_f","dbp3_f","dbp4_f","dbp5_f","dbp6_f","dbp7_f","dbp8_f","dbp9_f","dbp10_f","dbp11_f","dbp12_f","dbp13_f")],1,calc_avg)
@@ -138,6 +142,8 @@ data$stratum[which(data$stratum<0)] <- NA
 
 data$is_urban <- clean_data(data,'is_urban')
 summary(data$is_urban)
+
+#look back at metadata?
 
 ## is_pregnant
 

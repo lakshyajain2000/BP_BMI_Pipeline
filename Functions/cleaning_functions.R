@@ -352,3 +352,5 @@ calc_avg <- function(x){
   if (is.na(res)) res <- avg
   return (res)
 }
+
+# getting ride of sbpi<dbpi - make to NA but then it was still measured so can ignore this NA but need to flag this becuase could be the first measurement to exclude
