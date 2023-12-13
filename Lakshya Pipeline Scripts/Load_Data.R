@@ -13,8 +13,8 @@ wd <- "~/Documents/Pipeline/BP_BMI_Pipeline"  # Set working directory to folder 
 indir <- "/Volumes/HeightProject/Original dataset/Data/Surveys/Extracted survey/Merged/" # Call the folder with the merged dataset in 
 dhs   <- readRDS("/Volumes/HeightProject/Original dataset/Data/Surveys/DHS/DHS-formatted_latest.RDS")  # DHS dataframe
 steps <- readRDS("/Volumes/HeightProject/Original dataset/Data/Surveys/STEPS/STEPSdata_GLU_BP_chol_formatted_latest.RDS")  # STEPS dataframe
-data  <- readRDS("/Volumes/HeightProject/Original dataset/Data/Surveys/Extracted survey/Merged/individual_extracted_latest.RDS")
-
+data_f  <- readRDS("/Volumes/HeightProject/Original dataset/Data/Surveys/Extracted survey/Merged/individual_extracted_latest.RDS")
+data <- readRDS("/Volumes/HeightProject/Original dataset/Data/Surveys/Extracted survey/Merged/testing subsets/1percent_subset_individual_extracted_20231019.RDS")
 
 data_list <- readRDS(paste(indir,"survey_data_availability.RDS",sep="")) #List of metadata for each survey and what variables are available
 
@@ -50,8 +50,8 @@ data  <- subset(data,data$id_study%in%bp_list)
 steps <- subset(steps,steps$id_study%in%bp_list)
 dhs   <- subset(dhs,dhs$id_study%in%bp_list)
 
-data <- rbind.fill(data,dhs,steps) # combine all STEPS, DHS and individual data together 
-rm(dhs,steps)
+data <- rbind.fill(data,dhs) # combine all STEPS, DHS and individual data together 
+rm(dhs)
 data$id_study <- as.factor(data$id_study)
 
 data$dropped <- ""
